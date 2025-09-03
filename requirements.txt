@@ -1,0 +1,108 @@
+# Hepsiburada Test Automation Requirements
+# Core testing framework
+pytest>=7.0.0
+pytest-html>=3.1.0
+pytest-xdist>=3.0.0
+pytest-rerunfailures>=12.0
+
+# Selenium WebDriver
+selenium>=4.10.0
+webdriver-manager>=3.8.0
+
+# Page Object Model support
+selenium-page-factory>=0.1.0
+
+# Test reporting and visualization
+pytest-html>=3.1.0
+pytest-json-report>=1.5.0
+
+# Parallel test execution
+pytest-xdist>=3.0.0
+
+# Test retry mechanism
+pytest-rerunfailures>=12.0
+
+# Screenshot capture on failure
+pytest-screenshot>=1.0.0
+
+# Performance testing
+pytest-benchmark>=4.0.0
+
+# Test data management
+pytest-datadir>=1.4.0
+pytest-json-data>=0.0.1
+
+# Environment configuration
+python-dotenv>=1.0.0
+
+# Logging and debugging
+loguru>=0.7.0
+
+# Date and time handling
+python-dateutil>=2.8.0
+
+# Regular expressions
+regex>=2023.0.0
+
+# HTTP requests (if needed for API testing)
+requests>=2.31.0
+
+# JSON handling
+jsonschema>=4.17.0
+
+# Configuration management
+pyyaml>=6.0.0
+
+# Database testing (if needed)
+pytest-django>=4.5.0
+
+# Mock and test doubles
+pytest-mock>=3.10.0
+unittest-mock>=1.0.0
+
+# Code coverage
+pytest-cov>=4.0.0
+coverage>=7.2.0
+
+# Test fixtures
+pytest-fixture-class>=0.1.0
+
+# Test markers
+pytest-marker>=0.0.1
+
+# Test ordering
+pytest-ordering>=0.6
+
+# Test timeout
+pytest-timeout>=2.1.0
+
+# Test isolation
+pytest-isolation>=0.1.0
+
+# Test data factories
+factory-boy>=3.2.0
+faker>=18.0.0
+
+# Image comparison for visual testing
+pytest-image-diff>=0.1.0
+
+# Accessibility testing
+pytest-axe>=1.0.0
+
+# Performance monitoring
+pytest-profiling>=1.7.0
+
+# Test parallelization
+pytest-parallel>=0.1.0
+
+# Test discovery
+pytest-discovery>=0.1.0
+
+# Test execution hooks
+pytest-hook-caller>=0.1.0
+
+# Test result analysis
+pytest-analyzer>=0.1.0
+
+# Test documentation
+pytest-doc>=0.1.0
