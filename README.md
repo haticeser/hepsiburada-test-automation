@@ -252,7 +252,7 @@ Bu proje MIT lisansı altında lisanslanmıştır.
 
 - **Proje Sahibi**: haticeser
 - **Email**: haticeser@example.com
-- **Proje Linki**: https://github.com/haticeser/hepsiburada-test-automation
+- **Proje Linki**: https://github.com/haticeser/hepsiburada-test-automation-last
 
 ## 🙏 Teşekkürler
 
