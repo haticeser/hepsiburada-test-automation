@@ -81,3 +81,33 @@ class BasePage:
             except TimeoutException:
                 continue
         return False
+    
+    def close_google_password_popup(self):
+        """Google şifre kaydetme popup'ını kapatır"""
+        try:
+            # Google şifre kaydetme popup'ını kapat
+            google_popup_selectors = [
+                "button[aria-label='Kaydetme']",
+                "button[aria-label='Save']",
+                ".google-password-save",
+                "[class*='google-password']",
+                "button[data-testid*='save']",
+                "button[data-testid*='password']",
+                "button[aria-label*='Kaydet']",
+                "button[aria-label*='Save']"
+            ]
+            
+            for selector in google_popup_selectors:
+                try:
+                    google_button = WebDriverWait(self.driver, 2).until(
+                        EC.element_to_be_clickable((By.CSS_SELECTOR, selector))
+                    )
+                    if google_button.is_displayed():
+                        google_button.click()
+                        print(f"Google şifre popup kapatıldı: {selector}")
+                        return True
+                except TimeoutException:
+                    continue
+        except:
+            pass
+        return False

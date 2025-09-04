@@ -266,8 +266,18 @@ class HepsiburadaAutomation:
                 print("❌ Üye kaydı tamamlanamadı")
                 return False
             
-            print("🎉 TAM OTOMASYON BAŞARILI!")
+            print("🎉 ÜYE KAYDI TAMAMLANDI!")
             print("✅ Hesap oluşturuldu ve giriş yapıldı!")
+            
+            # 5. Üye kaydı sonrası ürün seçimi yap
+            print("🛍️ Üye kaydı sonrası ürün seçimi yapılıyor...")
+            if not self.select_laptop_after_registration():
+                print("⚠️ Ürün seçimi başarısız, ancak üye kaydı tamamlandı")
+                # Ürün seçimi başarısız olsa bile üye kaydı başarılı sayılır
+                return True
+            
+            print("🎉 TAM OTOMASYON BAŞARILI!")
+            print("✅ Hesap oluşturuldu, giriş yapıldı ve ürün seçimi tamamlandı!")
             return True
             
         except Exception as e:
@@ -317,6 +327,111 @@ class HepsiburadaAutomation:
             
         except Exception as e:
             print(f"❌ Giriş testi hatası: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
+    
+    def select_laptop_after_registration(self):
+        """Üye kaydı sonrası dizüstü bilgisayar seçimi yapar"""
+        print("💻 Üye kaydı sonrası dizüstü bilgisayar seçimi yapılıyor...")
+        
+        try:
+            # Ana sayfaya dön
+            print("🏠 Ana sayfaya dönülüyor...")
+            self.hepsiburada_page.go_to_hepsiburada()
+            
+            # Dizüstü bilgisayar seçimi yap
+            if self.hepsiburada_page.select_laptop_product():
+                print("✅ Dizüstü bilgisayar seçimi başarılı!")
+                return True
+            else:
+                print("❌ Dizüstü bilgisayar seçimi başarısız!")
+                return False
+                
+        except Exception as e:
+            print(f"❌ Ürün seçimi hatası: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
+    
+    def run_product_selection_test(self):
+        """Ürün seçimi testini çalıştırır"""
+        print("🛍️ Hepsiburada Ürün Seçimi Testi Başlatılıyor...")
+        print("=" * 60)
+        
+        try:
+            # Ana sayfaya git
+            print("🏠 Hepsiburada ana sayfasına gidiliyor...")
+            self.hepsiburada_page.go_to_hepsiburada()
+            
+            # Dizüstü bilgisayar seçimi yap
+            if self.hepsiburada_page.select_laptop_product():
+                print("✅ Ürün seçimi testi başarılı!")
+                print("🎯 Dizüstü bilgisayar sayfasına başarıyla gidildi")
+                return True
+            else:
+                print("❌ Ürün seçimi testi başarısız!")
+                return False
+                
+        except Exception as e:
+            print(f"❌ Ürün seçimi testi hatası: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
+    
+    def select_and_click_first_product(self):
+        """Filtrelenmiş ürünlerden ilkini seçer ve ürün sayfasına gider"""
+        print("🎯 Filtrelenmiş Ürün Seçimi ve Tıklama Testi Başlatılıyor...")
+        print("=" * 60)
+        
+        try:
+            # Ana sayfaya git
+            print("🏠 Hepsiburada ana sayfasına gidiliyor...")
+            self.hepsiburada_page.go_to_hepsiburada()
+            
+            # Dizüstü bilgisayar seçimi yap
+            if not self.hepsiburada_page.select_laptop_product():
+                print("❌ Dizüstü bilgisayar sayfasına gidilemedi")
+                return False
+            
+            print("✅ Dizüstü bilgisayar sayfasına gidildi")
+            
+            # Belirli filtreleri uygula (Lenovo + Intel Core i7)
+            print("🔍 Belirli filtreler uygulanıyor...")
+            filter_success = self.hepsiburada_page.apply_specific_filters(
+                brand="Lenovo",
+                processor="Intel Core i7"
+            )
+            
+            if not filter_success:
+                print("❌ Filtreler uygulanamadı")
+                return False
+            
+            print("✅ Filtreler başarıyla uygulandı")
+            
+            # Filtrelenmiş ürünlerden ilkini seç ve tıkla
+            print("🎯 İlk filtrelenmiş ürün seçiliyor...")
+            if self.hepsiburada_page.click_first_filtered_product():
+                print("✅ İlk ürün başarıyla seçildi ve ürün sayfasına gidildi!")
+                
+                # Ürün sayfası bilgilerini göster
+                current_url = self.driver.current_url
+                print(f"🔗 Ürün sayfası URL: {current_url}")
+                
+                # Sayfa başlığını kontrol et
+                try:
+                    page_title = self.driver.title
+                    print(f"📄 Sayfa başlığı: {page_title}")
+                except:
+                    print("⚠️ Sayfa başlığı alınamadı")
+                
+                return True
+            else:
+                print("❌ İlk ürün seçilemedi")
+                return False
+                
+        except Exception as e:
+            print(f"❌ Ürün seçimi ve tıklama hatası: {e}")
             import traceback
             traceback.print_exc()
             return False

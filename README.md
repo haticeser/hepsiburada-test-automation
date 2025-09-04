@@ -1,22 +1,25 @@
 # Hepsiburada Test Automation
 
-Bu proje, Hepsiburada web sitesi için kapsamlı test otomasyonu sağlar. Page Object Model (POM) deseni kullanılarak geliştirilmiş ve pytest framework'ü ile test edilmiştir.
+Bu proje, Hepsiburada web sitesi için kapsamlı test otomasyonu sağlar. Page Object Model (POM) deseni kullanılarak geliştirilmiş ve **tests klasörü olmadan** çalıştırılabilir basit scriptler ile kullanılabilir.
 
 ## 🚀 Özellikler
 
 - **Page Object Model (POM)**: Sürdürülebilir ve okunabilir test kodu
 - **Selenium WebDriver**: Modern web otomasyonu
-- **Pytest Framework**: Güçlü test framework'ü
-- **HTML Raporlama**: Detaylı test raporları
-- **Parallel Test Execution**: Hızlı test çalıştırma
-- **Cross-browser Support**: Chrome, Firefox, Edge desteği
-- **Responsive Testing**: Farklı ekran boyutlarında test
+- **Basit Çalıştırma**: Tests klasörü olmadan çalışır
+- **İnteraktif Menü**: Kolay kullanım için menü sistemi
+- **Komut Satırı Desteği**: Hızlı çalıştırma için CLI
+- **Otomatik WebDriver**: ChromeDriver otomatik indirme
 - **Error Handling**: Kapsamlı hata yönetimi
+- **Ürün Seçimi Otomasyonu**: Elektronik menüsünden ürün kategorisi seçimi
+- **Tempail Entegrasyonu**: Geçici email ile üye kaydı
 
 ## 📁 Proje Yapısı
 
 ```
-hepsiburada_tests/
+hepsiburada_test_automation/
+├── custom_automation.py            # ✅ İnteraktif menü scripti
+├── run_automation.py               # ✅ Hızlı komut satırı scripti
 ├── pages/                          # Page Object Model sınıfları
 │   ├── base_page.py               # Temel sayfa sınıfı
 │   ├── hepsiburada_page.py        # Hepsiburada ana sayfa
@@ -24,17 +27,11 @@ hepsiburada_tests/
 │   ├── login_page.py              # Giriş sayfası
 │   ├── tempail_page.py            # Tempail email servisi
 │   └── hepsiburada_automation.py  # Ana otomasyon sınıfı
-├── tests/                          # Test dosyaları
-│   ├── test_integration.py        # Entegrasyon testleri
-│   ├── test_registration.py       # Kayıt testleri
-│   ├── test_login.py              # Giriş testleri
-│   └── test_tempail.py            # Tempail testleri
-├── reports/                        # Test raporları
-├── conftest.py                    # Pytest konfigürasyonu
-├── pytest.ini                     # Pytest ayarları
+├── reports/                        # Test raporları (opsiyonel)
+├── conftest.py                    # WebDriver konfigürasyonu
 ├── requirements.txt                # Gerekli paketler
-├── run_tests.py                   # Test çalıştırıcı
-└── README.md                      # Bu dosya
+├── README.md                      # Bu dosya
+└── README_CUSTOM.md               # Detaylı kullanım kılavuzu
 ```
 
 ## 🛠️ Kurulum
@@ -42,10 +39,10 @@ hepsiburada_tests/
 ### Gereksinimler
 
 - Python 3.8+
-- Chrome WebDriver (otomatik yönetim)
+- Chrome Browser
 - pip
 
-### Kurulum Adımları
+### Hızlı Kurulum
 
 1. **Repository'yi klonlayın:**
    ```bash
@@ -53,225 +50,166 @@ hepsiburada_tests/
    cd hepsiburada_test_automation
    ```
 
-2. **Virtual environment oluşturun:**
+2. **Gerekli paketleri yükleyin:**
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # Linux/Mac
-   # veya
-   venv\Scripts\activate     # Windows
+   pip install -r requirements.txt
    ```
 
-3. **Gerekli paketleri yükleyin:**
+3. **Hazır! Artık çalıştırabilirsiniz:**
    ```bash
-   pip install -r hepsiburada_tests/requirements.txt
+   python custom_automation.py
    ```
 
-4. **Chrome WebDriver'ı yükleyin:**
-   ```bash
-   # Otomatik yönetim (önerilen)
-   pip install webdriver-manager
-   ```
+### Chrome WebDriver
+ChromeDriver otomatik olarak indirilir ve yönetilir. Manuel kurulum gerekmez.
 
 ## 🧪 Test Çalıştırma
 
-### İnteraktif Mod
+### 🎯 İnteraktif Menü (Önerilen)
 
 ```bash
-cd hepsiburada_tests
-python run_tests.py
+python custom_automation.py
 ```
 
-### Komut Satırı Modu
+Menüden istediğiniz testi seçin:
+- 🚀 Tam Otomasyon (Üyelik + Ürün Seçimi)
+- 📝 Sadece Üye Kaydı
+- 🔑 Sadece Giriş Testi
+- 🛍️ Sadece Ürün Seçimi
+- 🎯 Filtreli Ürün Seçimi (Lenovo + Intel Core i7)
+- 📧 Sadece Tempail Email Testi
+
+### ⚡ Hızlı Komut Satırı
 
 ```bash
-# Tüm testleri çalıştır
-python run_tests.py all
+# Tam otomasyon (Üyelik + Ürün Seçimi)
+python run_automation.py full
 
-# Sadece entegrasyon testleri
-python run_tests.py integration
+# Sadece üye kaydı
+python run_automation.py register
 
-# Sadece kayıt testleri
-python run_tests.py registration
+# Sadece giriş testi
+python run_automation.py login
 
-# Sadece giriş testleri
-python run_tests.py login
+# Sadece ürün seçimi
+python run_automation.py product
 
-# Sadece Tempail testleri
-python run_tests.py tempail
+# Filtreli ürün seçimi (Lenovo + Intel Core i7)
+python run_automation.py filtered
 
-# Verbose mod ile
-python run_tests.py all -v
+# Sadece Tempail email testi
+python run_automation.py tempail
 
-# Parallel mod ile
-python run_tests.py all -p
+# İnteraktif menü
+python run_automation.py menu
 ```
 
-### Pytest Direkt
+## 🎯 Test Senaryoları
 
+### 1. 🚀 Tam Otomasyon
+- Tempail'den geçici email alır
+- Hepsiburada'da üye kaydı yapar
+- Doğrulama kodunu bekler ve girer
+- Dizüstü bilgisayar kategorisine gider
+- Lenovo + Intel Core i7 filtresi uygular
+- İlk filtrelenmiş ürünü seçer
+
+### 2. 📝 Sadece Üye Kaydı
+- Tempail'den email alır
+- Hepsiburada'da üye kaydı formunu doldurur
+- Doğrulama kodunu bekler ve girer
+- Kişisel bilgileri doldurur
+- Üye kaydını tamamlar
+
+### 3. 🔑 Sadece Giriş Testi
+- Tempail'den email alır
+- Hepsiburada'ya giriş yapar
+- Doğrulama kodunu bekler ve girer
+
+### 4. 🛍️ Sadece Ürün Seçimi
+- Hepsiburada ana sayfasına gider
+- Dizüstü bilgisayar kategorisine gider
+
+### 5. 🎯 Filtreli Ürün Seçimi
+- Dizüstü bilgisayar kategorisine gider
+- Lenovo marka filtresi uygular
+- Intel Core i7 işlemci filtresi uygular
+- İlk filtrelenmiş ürünü seçer
+
+### 6. 📧 Sadece Tempail Email Testi
+- Tempail.com'a gider
+- Geçici email alır
+- Email formatını kontrol eder
+
+## 🔧 Özellikler
+
+### ✅ Avantajlar
+- **Tests klasörü gerekmez** - Sadece `pages/` klasörü yeterli
+- **İnteraktif menü** - Kolay kullanım
+- **Komut satırı desteği** - Hızlı çalıştırma
+- **Detaylı loglar** - Her adımı takip edebilirsiniz
+- **Hata yönetimi** - Güvenli çalışma
+- **Otomatik WebDriver** - ChromeDriver otomatik indirilir
+
+### 🎯 Kullanım Örnekleri
+
+**İlk kez çalıştırıyorsanız:**
 ```bash
-# Tüm testler
-pytest
-
-# Belirli test dosyası
-pytest tests/test_registration.py
-
-# Belirli test sınıfı
-pytest tests/test_registration.py::TestHepsiburadaRegistration
-
-# Belirli test metodu
-pytest tests/test_registration.py::TestHepsiburadaRegistration::test_registration_flow
-
-# Verbose mod
-pytest -v
-
-# HTML rapor ile
-pytest --html=reports/report.html --self-contained-html
-
-# Parallel execution
-pytest -n auto
+python custom_automation.py
+# Menüden "1" seçerek tam otomasyonu deneyin
 ```
 
-## 📊 Test Türleri
-
-### 1. Entegrasyon Testleri (`test_integration.py`)
-- Tam üye kaydı otomasyonu
-- Giriş otomasyonu
-- Sayfa navigasyonu
-- Form elementleri
-- Popup kapatma
-
-### 2. Kayıt Testleri (`test_registration.py`)
-- Kayıt formu validasyonu
-- Geçersiz email testleri
-- Şifre gereksinimleri
-- Doğrulama kodu formatı
-- Kişisel bilgi formu
-
-### 3. Giriş Testleri (`test_login.py`)
-- Giriş formu elementleri
-- Geçersiz kimlik bilgileri
-- Doğrulama kodu formatı
-- Başarı göstergeleri
-- Responsive tasarım
-
-### 4. Tempail Testleri (`test_tempail.py`)
-- Email oluşturma
-- Çoklu email testi
-- Doğrulama kodu bekleme
-- Sayfa elementleri
-- Performans testleri
-
-## 🔧 Konfigürasyon
-
-### Pytest Ayarları (`pytest.ini`)
-
-```ini
-[tool:pytest]
-testpaths = tests
-python_files = test_*.py
-python_classes = Test*
-python_functions = test_*
-addopts = 
-    -v
-    --tb=short
-    --strict-markers
-    --disable-warnings
-markers =
-    slow: marks tests as slow
-    integration: marks tests as integration tests
-    smoke: marks tests as smoke tests
-```
-
-### Test Fixtures (`conftest.py`)
-
-- `driver`: WebDriver instance
-- `wait`: WebDriverWait instance
-- `test_credentials`: Test kimlik bilgileri
-
-## 📈 Raporlama
-
-### HTML Raporlar
-- Otomatik rapor oluşturma
-- Test sonuçları
-- Hata detayları
-- Screenshot'lar
-- Zaman bilgileri
-
-### Rapor Konumu
-```
-reports/
-└── test_report_YYYYMMDD_HHMMSS.html
-```
-
-## 🚨 Hata Yönetimi
-
-### Yaygın Hatalar
-
-1. **WebDriver Hatası**
-   - Chrome WebDriver'ın güncel olduğundan emin olun
-   - `webdriver-manager` kullanarak otomatik yönetim
-
-2. **Element Bulunamadı**
-   - Sayfa yüklenme süresini artırın
-   - Selector'ları güncelleyin
-   - Explicit wait kullanın
-
-3. **Timeout Hatası**
-   - `conftest.py`'de timeout değerlerini artırın
-   - Ağ bağlantısını kontrol edin
-
-### Debug Modu
-
+**Hızlı test için:**
 ```bash
-# Verbose mod ile çalıştır
-pytest -v -s
-
-# Belirli testi debug et
-pytest tests/test_registration.py::test_registration_flow -v -s
+python run_automation.py tempail
+# Sadece Tempail email testini çalıştırın
 ```
 
-## 🔄 CI/CD Entegrasyonu
-
-### GitHub Actions
-
-```yaml
-name: Test Automation
-on: [push, pull_request]
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.9
-    - name: Install dependencies
-      run: |
-        pip install -r hepsiburada_tests/requirements.txt
-    - name: Run tests
-      run: |
-        cd hepsiburada_tests
-        pytest --html=reports/report.html
+**Üye kaydı testi için:**
+```bash
+python run_automation.py register
 ```
+
+## ⚠️ Önemli Notlar
+
+1. **Chrome Browser Gerekli**: Script Chrome browser kullanır
+2. **İnternet Bağlantısı**: Tempail ve Hepsiburada'ya erişim gerekli
+3. **Doğrulama Kodu**: Email doğrulama kodları manuel olarak beklenir
+4. **Timeout**: Bazı işlemler 120 saniye timeout ile çalışır
+
+## 🐛 Sorun Giderme
+
+### WebDriver Hatası
+```bash
+# WebDriver Manager otomatik olarak ChromeDriver indirir
+# Eğer hata alırsanız, Chrome browser'ın güncel olduğundan emin olun
+```
+
+### Import Hatası
+```bash
+# Pages modüllerinin doğru konumda olduğundan emin olun
+# Script'i proje ana dizininden çalıştırın
+```
+
+### Email Alamama
+```bash
+# Tempail.com erişilebilir olduğundan emin olun
+# İnternet bağlantınızı kontrol edin
+```
+
+## 📞 Destek
+
+Herhangi bir sorun yaşarsanız:
+1. Hata mesajını kontrol edin
+2. İnternet bağlantınızı kontrol edin
+3. Chrome browser'ın güncel olduğundan emin olun
+4. Script'i proje ana dizininden çalıştırdığınızdan emin olun
 
 ## 📝 Geliştirme
 
-### Yeni Test Ekleme
+### Yeni Özellik Ekleme
 
-1. **Test dosyası oluşturun:**
-   ```python
-   # tests/test_new_feature.py
-   import pytest
-   from pages.hepsiburada_automation import HepsiburadaAutomation
-   
-   class TestNewFeature:
-       def test_new_functionality(self, driver):
-           automation = HepsiburadaAutomation(driver)
-           # Test kodunuz
-   ```
-
-2. **Page Object ekleyin:**
+1. **Yeni sayfa sınıfı ekleyin:**
    ```python
    # pages/new_page.py
    from .base_page import BasePage
@@ -281,12 +219,22 @@ jobs:
            # Sayfa metodu
    ```
 
+2. **Ana otomasyon sınıfına entegre edin:**
+   ```python
+   # pages/hepsiburada_automation.py
+   from .new_page import NewPage
+   
+   class HepsiburadaAutomation:
+       def __init__(self, driver):
+           self.new_page = NewPage(driver)
+   ```
+
 ### Kod Standartları
 
 - PEP 8 uyumlu
 - Docstring'ler zorunlu
-- Type hints kullanın
 - Error handling ekleyin
+- Detaylı log çıktıları
 
 ## 🤝 Katkıda Bulunma
 
@@ -309,9 +257,16 @@ Bu proje MIT lisansı altında lisanslanmıştır.
 ## 🙏 Teşekkürler
 
 - Selenium WebDriver ekibi
-- Pytest geliştiricileri
 - Page Object Model topluluğu
+- Tempail.com servisi
 
 ---
 
 **Not**: Bu proje eğitim amaçlı geliştirilmiştir. Gerçek web sitelerinde test yaparken site kullanım şartlarını göz önünde bulundurun.
+
+## 📚 Ek Kaynaklar
+
+- [README_CUSTOM.md](README_CUSTOM.md) - Detaylı kullanım kılavuzu
+- [requirements.txt](requirements.txt) - Gerekli kütüphaneler
+- [custom_automation.py](custom_automation.py) - İnteraktif menü scripti
+- [run_automation.py](run_automation.py) - Hızlı çalıştırma scripti
