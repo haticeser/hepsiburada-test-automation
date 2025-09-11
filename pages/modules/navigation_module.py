@@ -54,18 +54,62 @@ class NavigationModule(BasePage):
                 print("🔍 Submenüde Giriş Yap linki aranıyor (ID ile)...")
                 
                 try:
-                    # ID ile Giriş Yap linkini bul - daha uzun bekle
-                    submenu_login = WebDriverWait(self.driver, 10).until(
-                        EC.element_to_be_clickable((By.ID, "login"))
-                    )
-                    # JavaScript ile tıklama - daha güvenilir
-                    self.driver.execute_script("arguments[0].click();", submenu_login)
-                    print("✅ Submenüden Giriş Yap'a tıklandı (ID: login)")
-                    time.sleep(2)  # Giriş sayfasının yüklenmesi için bekle
-                    return True
+                    # Çoklu strateji ile Giriş Yap linkini bul
+                    submenu_login = None
                     
-                except TimeoutException:
-                    print("❌ Submenüde Giriş Yap linki bulunamadı (ID: login)")
+                    # Strateji 1: ID ile arama
+                    try:
+                        submenu_login = WebDriverWait(self.driver, 3).until(
+                            EC.element_to_be_clickable((By.ID, "login"))
+                        )
+                        print("✅ Giriş linki bulundu (ID: login)")
+                    except TimeoutException:
+                        pass
+                    
+                    # Strateji 2: Text ile arama
+                    if not submenu_login:
+                        try:
+                            submenu_login = WebDriverWait(self.driver, 3).until(
+                                EC.element_to_be_clickable((By.XPATH, "//a[contains(text(), 'Giriş Yap')]"))
+                            )
+                            print("✅ Giriş linki bulundu (Text: Giriş Yap)")
+                        except TimeoutException:
+                            pass
+                    
+                    # Strateji 3: href ile arama
+                    if not submenu_login:
+                        try:
+                            submenu_login = WebDriverWait(self.driver, 3).until(
+                                EC.element_to_be_clickable((By.XPATH, "//a[contains(@href, 'login') or contains(@href, 'giris')]"))
+                            )
+                            print("✅ Giriş linki bulundu (href: login/giris)")
+                        except TimeoutException:
+                            pass
+                    
+                    # Strateji 4: Genel arama
+                    if not submenu_login:
+                        try:
+                            all_links = self.driver.find_elements(By.TAG_NAME, "a")
+                            for link in all_links:
+                                if link.is_displayed() and ("giriş" in link.text.lower() or "login" in link.text.lower()):
+                                    submenu_login = link
+                                    print("✅ Giriş linki bulundu (Genel arama)")
+                                    break
+                        except:
+                            pass
+                    
+                    if submenu_login:
+                        # JavaScript ile tıklama - daha güvenilir
+                        self.driver.execute_script("arguments[0].click();", submenu_login)
+                        print("✅ Submenüden Giriş Yap'a tıklandı")
+                        time.sleep(2)  # Giriş sayfasının yüklenmesi için bekle
+                        return True
+                    else:
+                        print("❌ Submenüde Giriş Yap linki bulunamadı (Tüm stratejiler başarısız)")
+                        return False
+                    
+                except Exception as e:
+                    print(f"❌ Giriş linki tıklama hatası: {e}")
                     return False
                     
             except TimeoutException:
