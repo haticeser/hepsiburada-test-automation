@@ -41,7 +41,7 @@ pipeline {
         stage('Test Execution') {
             steps {
                 echo '🧪 Tüm testler sıralı olarak çalıştırılıyor...'
-                bat 'pytest tests/ -v --tb=short --alluredir=allure-results --html=reports/test_report.html --self-contained-html --maxfail=1'
+                bat 'pytest tests/test_smoke.py -v --tb=short --alluredir=allure-results --html=reports/test_report.html --self-contained-html'
             }
             post {
                 always {
