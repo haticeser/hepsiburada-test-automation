@@ -96,6 +96,13 @@ pipeline {
                 
                 // Log dosyalarını temizle
                 sh 'find . -name "*.log" -delete 2>/dev/null || true'
+                
+                // Artifacts arşivle
+                echo '📦 Artifacts arşivleniyor...'
+                archiveArtifacts artifacts: 'allure-report.tar.gz', fingerprint: true
+                archiveArtifacts artifacts: 'reports/*.html', fingerprint: true
+                archiveArtifacts artifacts: 'screenshots.tar.gz', fingerprint: true
+                archiveArtifacts artifacts: 'test_summary.txt', fingerprint: true
             }
         }
         
@@ -151,23 +158,6 @@ pipeline {
         
         unstable {
             echo '⚠️ Testler kararsız durumda!'
-        }
-        
-        always {
-            echo '📦 Artifacts arşivleniyor...'
-            script {
-                // Allure raporu
-                archiveArtifacts artifacts: 'allure-report.tar.gz', fingerprint: true
-                
-                // HTML raporları
-                archiveArtifacts artifacts: 'reports/*.html', fingerprint: true
-                
-                // Screenshot'lar
-                archiveArtifacts artifacts: 'screenshots.tar.gz', fingerprint: true
-                
-                // Test özeti
-                archiveArtifacts artifacts: 'test_summary.txt', fingerprint: true
-            }
         }
     }
 }
