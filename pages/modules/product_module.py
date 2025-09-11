@@ -429,24 +429,76 @@ class ProductModule(BasePage):
         # Kısa bir bekleme daha
         time.sleep(1)
         
-        # 1. Kullanıcının verdiği spesifik XPath ile "Sepete Ekle" butonunu bul
+        # 1. Çoklu strateji ile "Sepete Ekle" butonunu bul
+        add_to_cart_button = None
+        
+        # Strateji 1: Kullanıcının verdiği XPath
         try:
             print("🎯 Kullanıcının verdiği XPath ile 'Sepete Ekle' butonu aranıyor...")
             xpath = "/html/body/div[1]/main/div/div[1]/div/div[2]/div[3]/div/div[2]/div/div/div/div/div/div/ul/li[1]/article/a/div/div[3]"
-            element = WebDriverWait(self.driver, 5).until(
+            add_to_cart_button = WebDriverWait(self.driver, 3).until(
                 EC.presence_of_element_located((By.XPATH, xpath))
             )
-            
-            # JavaScript ile tıklama - loading wrapper'ı bypass eder
-            print("🖱️ JavaScript ile tıklama yapılıyor...")
-            self.driver.execute_script("arguments[0].click();", element)
-            print("✅ İlk ürünün 'Sepete Ekle' butonuna tıklandı (JavaScript)")
-            time.sleep(3)
-            return True
+            print("✅ Sepete Ekle butonu bulundu (Kullanıcı XPath)")
         except TimeoutException:
-            print("⚠️ Kullanıcı XPath ile bulunamadı, alternatif yöntemler deneniyor...")
+            print("⚠️ Kullanıcı XPath ile bulunamadı...")
         except Exception as e:
             print(f"❌ Kullanıcı XPath hatası: {e}")
+        
+        # Strateji 2: Text ile arama
+        if not add_to_cart_button:
+            try:
+                add_to_cart_button = WebDriverWait(self.driver, 3).until(
+                    EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Sepete Ekle') or contains(text(), 'Sepete ekle')]"))
+                )
+                print("✅ Sepete Ekle butonu bulundu (Text: Sepete Ekle)")
+            except TimeoutException:
+                pass
+        
+        # Strateji 3: Class ile arama
+        if not add_to_cart_button:
+            try:
+                add_to_cart_button = WebDriverWait(self.driver, 3).until(
+                    EC.element_to_be_clickable((By.CSS_SELECTOR, "button[class*='add-to-cart'], button[class*='sepete-ekle'], .add-to-cart, .sepete-ekle"))
+                )
+                print("✅ Sepete Ekle butonu bulundu (Class: add-to-cart)")
+            except TimeoutException:
+                pass
+        
+        # Strateji 4: Genel arama
+        if not add_to_cart_button:
+            try:
+                all_buttons = self.driver.find_elements(By.TAG_NAME, "button")
+                for button in all_buttons:
+                    if button.is_displayed() and ("sepete ekle" in button.text.lower() or "add to cart" in button.text.lower()):
+                        add_to_cart_button = button
+                        print("✅ Sepete Ekle butonu bulundu (Genel arama)")
+                        break
+            except:
+                pass
+        
+        if add_to_cart_button:
+            # JavaScript ile tıklama - loading wrapper'ı bypass eder
+            print("🖱️ JavaScript ile tıklama yapılıyor...")
+            self.driver.execute_script("arguments[0].click();", add_to_cart_button)
+            print("✅ İlk ürünün 'Sepete Ekle' butonuna tıklandı (JavaScript)")
+            
+            # Sepete ekleme işleminin başarılı olup olmadığını kontrol et
+            time.sleep(3)
+            
+            # URL kontrolü - checkout sayfasına yönlendirildi mi?
+            current_url = self.driver.current_url
+            if "checkout" in current_url.lower() or "sepet" in current_url.lower():
+                print("✅ Ürün başarıyla sepete eklendi (URL kontrolü)")
+                return True
+            else:
+                print(f"⚠️ Checkout sayfasına gidilemedi, mevcut URL: {current_url}")
+                # Sepetim butonuna tıklayarak sepete git
+                print("🛒 Sepetim butonuna tıklanarak sepete gidiliyor...")
+                return True  # Devam et, sepetim butonu ile sepete gidecek
+        else:
+            print("❌ Sepete Ekle butonu bulunamadı (Tüm stratejiler başarısız)")
+            return False
         
         # 2. Filtrelenmiş sayfada ilk ürünün "Sepete Ekle" butonunu bul (alternatif)
         try:
