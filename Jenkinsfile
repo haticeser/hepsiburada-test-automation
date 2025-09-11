@@ -45,14 +45,7 @@ pipeline {
             }
             post {
                 always {
-                    publishHTML([
-                        allowMissing: false,
-                        alwaysLinkToLastBuild: true,
-                        keepAll: true,
-                        reportDir: 'reports',
-                        reportFiles: 'test_report.html',
-                        reportName: 'Test Report'
-                    ])
+                    echo '📊 Test raporu oluşturuldu: reports/test_report.html'
                 }
             }
         }
