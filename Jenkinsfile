@@ -21,10 +21,12 @@ pipeline {
                 echo '🔧 Python ortamı hazırlanıyor...'
                 script {
                     // Python sürümünü kontrol et
-                    sh 'python --version'
+                    bat 'python --version'
                     
                     // Gerekli dizinleri oluştur
-                    sh 'mkdir -p allure-results reports screenshots'
+                    bat 'if not exist allure-results mkdir allure-results'
+                    bat 'if not exist reports mkdir reports'
+                    bat 'if not exist screenshots mkdir screenshots'
                 }
             }
         }
@@ -32,14 +34,14 @@ pipeline {
         stage('Dependencies Install') {
             steps {
                 echo '📦 Bağımlılıklar yükleniyor...'
-                sh 'pip install -r requirements.txt'
+                bat 'pip install -r requirements.txt'
             }
         }
         
         stage('Test Execution') {
             steps {
                 echo '🧪 Tüm testler sıralı olarak çalıştırılıyor...'
-                sh 'pytest tests/ -v --tb=short --alluredir=allure-results --html=reports/test_report.html --self-contained-html --maxfail=1'
+                bat 'pytest tests/ -v --tb=short --alluredir=allure-results --html=reports/test_report.html --self-contained-html --maxfail=1'
             }
             post {
                 always {
@@ -60,10 +62,10 @@ pipeline {
                 echo '📊 Allure raporu oluşturuluyor...'
                 script {
                     // Allure raporu oluştur
-                    sh 'allure generate allure-results -o allure-report --clean'
+                    bat 'allure generate allure-results -o allure-report --clean'
                     
-                    // Allure raporunu arşivle
-                    sh 'tar -czf allure-report.tar.gz allure-report/'
+                    // Allure raporunu arşivle (Windows için PowerShell kullan)
+                    bat 'powershell -Command "Compress-Archive -Path allure-report -DestinationPath allure-report.zip -Force"'
                 }
             }
         }
@@ -73,14 +75,14 @@ pipeline {
                 echo '📋 Test özeti oluşturuluyor...'
                 script {
                     // Test sonuçlarını topla
-                    sh '''
-                        echo "=== TEST ÖZETİ ===" > test_summary.txt
-                        echo "Tarih: $(date)" >> test_summary.txt
-                        echo "Branch: ${GIT_BRANCH}" >> test_summary.txt
-                        echo "Commit: ${GIT_COMMIT}" >> test_summary.txt
-                        echo "" >> test_summary.txt
-                        echo "=== PYTEST SONUÇLARI ===" >> test_summary.txt
-                        pytest --collect-only -q >> test_summary.txt 2>&1 || true
+                    bat '''
+                        echo === TEST ÖZETİ === > test_summary.txt
+                        echo Tarih: %date% %time% >> test_summary.txt
+                        echo Branch: %GIT_BRANCH% >> test_summary.txt
+                        echo Commit: %GIT_COMMIT% >> test_summary.txt
+                        echo. >> test_summary.txt
+                        echo === PYTEST SONUÇLARI === >> test_summary.txt
+                        pytest --collect-only -q >> test_summary.txt 2>&1
                     '''
                 }
             }
@@ -91,17 +93,17 @@ pipeline {
         always {
             echo '🧹 Temizlik işlemleri yapılıyor...'
             script {
-                // Screenshot'ları arşivle
-                sh 'tar -czf screenshots.tar.gz screenshots/ 2>/dev/null || true'
+                // Screenshot'ları arşivle (Windows için PowerShell)
+                bat 'powershell -Command "if (Test-Path screenshots) { Compress-Archive -Path screenshots -DestinationPath screenshots.zip -Force }"'
                 
                 // Log dosyalarını temizle
-                sh 'find . -name "*.log" -delete 2>/dev/null || true'
+                bat 'del /q *.log 2>nul || echo Log dosyası bulunamadı'
                 
                 // Artifacts arşivle
                 echo '📦 Artifacts arşivleniyor...'
-                archiveArtifacts artifacts: 'allure-report.tar.gz', fingerprint: true
+                archiveArtifacts artifacts: 'allure-report.zip', fingerprint: true
                 archiveArtifacts artifacts: 'reports/*.html', fingerprint: true
-                archiveArtifacts artifacts: 'screenshots.tar.gz', fingerprint: true
+                archiveArtifacts artifacts: 'screenshots.zip', fingerprint: true
                 archiveArtifacts artifacts: 'test_summary.txt', fingerprint: true
             }
         }
