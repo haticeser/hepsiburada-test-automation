@@ -22,9 +22,9 @@ from pages.driver_manager import driver_manager
 from pages.hepsiburada_automation import HepsiburadaAutomation
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="session")
 def driver():
-    """WebDriver fixture - her test için yeni bir driver instance"""
+    """WebDriver fixture - tüm testler için tek bir driver instance"""
     print("🚀 WebDriver başlatılıyor...")
     driver = driver_manager.get_driver_safely()
     yield driver

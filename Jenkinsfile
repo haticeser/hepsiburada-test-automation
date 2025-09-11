@@ -37,119 +37,20 @@ pipeline {
         }
         
         stage('Test Execution') {
-            parallel {
-                stage('Smoke Tests') {
-                    steps {
-                        echo '🧪 Smoke testler çalıştırılıyor...'
-                        sh 'pytest tests/test_smoke.py -v --tb=short --alluredir=allure-results --html=reports/smoke_report.html --self-contained-html'
-                    }
-                    post {
-                        always {
-                            publishHTML([
-                                allowMissing: false,
-                                alwaysLinkToLastBuild: true,
-                                keepAll: true,
-                                reportDir: 'reports',
-                                reportFiles: 'smoke_report.html',
-                                reportName: 'Smoke Test Report'
-                            ])
-                        }
-                    }
-                }
-                
-                stage('Regression Tests') {
-                    steps {
-                        echo '🧪 Regression testler çalıştırılıyor...'
-                        sh 'pytest tests/test_regression.py -v --tb=short --alluredir=allure-results --html=reports/regression_report.html --self-contained-html'
-                    }
-                    post {
-                        always {
-                            publishHTML([
-                                allowMissing: false,
-                                alwaysLinkToLastBuild: true,
-                                keepAll: true,
-                                reportDir: 'reports',
-                                reportFiles: 'regression_report.html',
-                                reportName: 'Regression Test Report'
-                            ])
-                        }
-                    }
-                }
-                
-                stage('Login Tests') {
-                    steps {
-                        echo '🔑 Giriş testleri çalıştırılıyor...'
-                        sh 'pytest tests/test_login.py -v --tb=short --alluredir=allure-results --html=reports/login_report.html --self-contained-html'
-                    }
-                    post {
-                        always {
-                            publishHTML([
-                                allowMissing: false,
-                                alwaysLinkToLastBuild: true,
-                                keepAll: true,
-                                reportDir: 'reports',
-                                reportFiles: 'login_report.html',
-                                reportName: 'Login Test Report'
-                            ])
-                        }
-                    }
-                }
-                
-                stage('Product Tests') {
-                    steps {
-                        echo '🛍️ Ürün testleri çalıştırılıyor...'
-                        sh 'pytest tests/test_product.py -v --tb=short --alluredir=allure-results --html=reports/product_report.html --self-contained-html'
-                    }
-                    post {
-                        always {
-                            publishHTML([
-                                allowMissing: false,
-                                alwaysLinkToLastBuild: true,
-                                keepAll: true,
-                                reportDir: 'reports',
-                                reportFiles: 'product_report.html',
-                                reportName: 'Product Test Report'
-                            ])
-                        }
-                    }
-                }
-                
-                stage('Cart Tests') {
-                    steps {
-                        echo '🛒 Sepet testleri çalıştırılıyor...'
-                        sh 'pytest tests/test_cart.py -v --tb=short --alluredir=allure-results --html=reports/cart_report.html --self-contained-html'
-                    }
-                    post {
-                        always {
-                            publishHTML([
-                                allowMissing: false,
-                                alwaysLinkToLastBuild: true,
-                                keepAll: true,
-                                reportDir: 'reports',
-                                reportFiles: 'cart_report.html',
-                                reportName: 'Cart Test Report'
-                            ])
-                        }
-                    }
-                }
-                
-                stage('Checkout Tests') {
-                    steps {
-                        echo '💳 Ödeme testleri çalıştırılıyor...'
-                        sh 'pytest tests/test_checkout.py -v --tb=short --alluredir=allure-results --html=reports/checkout_report.html --self-contained-html'
-                    }
-                    post {
-                        always {
-                            publishHTML([
-                                allowMissing: false,
-                                alwaysLinkToLastBuild: true,
-                                keepAll: true,
-                                reportDir: 'reports',
-                                reportFiles: 'checkout_report.html',
-                                reportName: 'Checkout Test Report'
-                            ])
-                        }
-                    }
+            steps {
+                echo '🧪 Tüm testler sıralı olarak çalıştırılıyor...'
+                sh 'pytest tests/ -v --tb=short --alluredir=allure-results --html=reports/test_report.html --self-contained-html --maxfail=1'
+            }
+            post {
+                always {
+                    publishHTML([
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: 'reports',
+                        reportFiles: 'test_report.html',
+                        reportName: 'Test Report'
+                    ])
                 }
             }
         }

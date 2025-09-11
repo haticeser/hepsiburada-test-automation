@@ -32,6 +32,12 @@ class TestSmoke:
             name="Test Sonucu",
             attachment_type=allure.attachment_type.TEXT
         )
+        
+        # Test sonrası sayfa yenileme
+        with allure.step("Test sonrası sayfa yenileniyor"):
+            automation.driver.refresh()
+            import time
+            time.sleep(2)
     
     @allure.feature("Giriş İşlemleri")
     @allure.story("Direkt Giriş Testi")
