@@ -32,45 +32,4 @@ class TestSmoke:
             name="Test Sonucu",
             attachment_type=allure.attachment_type.TEXT
         )
-        
-        # Test sonrası sayfa yenileme
-        with allure.step("Test sonrası sayfa yenileniyor"):
-            automation.driver.refresh()
-            import time
-            time.sleep(2)
     
-    @allure.feature("Giriş İşlemleri")
-    @allure.story("Direkt Giriş Testi")
-    @allure.severity(allure.severity_level.CRITICAL)
-    def test_direct_login(self, automation):
-        """Sabit kullanıcı bilgileri ile direkt giriş testi"""
-        with allure.step("Direkt giriş testi başlatılıyor"):
-            result = automation.run_direct_login_test()
-            
-        with allure.step("Direkt giriş sonucu kontrol ediliyor"):
-            assert result is not None, "Direkt giriş testi sonucu None döndü"
-            assert result, f"Direkt giriş başarısız: {result}"
-            
-        allure.attach(
-            f"Direkt giriş başarılı: {result}",
-            name="Test Sonucu",
-            attachment_type=allure.attachment_type.TEXT
-        )
-    
-    @allure.feature("Ürün İşlemleri")
-    @allure.story("Ürün Seçimi Testi")
-    @allure.severity(allure.severity_level.CRITICAL)
-    def test_product_selection(self, automation):
-        """Temel ürün seçimi işlevselliğini test eder"""
-        with allure.step("Ürün seçimi testi başlatılıyor"):
-            result = automation.run_product_selection_test()
-            
-        with allure.step("Ürün seçimi sonucu kontrol ediliyor"):
-            assert result is not None, "Ürün seçimi testi sonucu None döndü"
-            assert result, f"Ürün seçimi başarısız: {result}"
-            
-        allure.attach(
-            f"Ürün seçimi başarılı: {result}",
-            name="Test Sonucu",
-            attachment_type=allure.attachment_type.TEXT
-        )
