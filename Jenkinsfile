@@ -152,19 +152,22 @@ pipeline {
         unstable {
             echo '⚠️ Testler kararsız durumda!'
         }
-    }
-    
-    artifacts {
-        // Allure raporu
-        archiveArtifacts artifacts: 'allure-report.tar.gz', fingerprint: true
         
-        // HTML raporları
-        archiveArtifacts artifacts: 'reports/*.html', fingerprint: true
-        
-        // Screenshot'lar
-        archiveArtifacts artifacts: 'screenshots.tar.gz', fingerprint: true
-        
-        // Test özeti
-        archiveArtifacts artifacts: 'test_summary.txt', fingerprint: true
+        always {
+            echo '📦 Artifacts arşivleniyor...'
+            script {
+                // Allure raporu
+                archiveArtifacts artifacts: 'allure-report.tar.gz', fingerprint: true
+                
+                // HTML raporları
+                archiveArtifacts artifacts: 'reports/*.html', fingerprint: true
+                
+                // Screenshot'lar
+                archiveArtifacts artifacts: 'screenshots.tar.gz', fingerprint: true
+                
+                // Test özeti
+                archiveArtifacts artifacts: 'test_summary.txt', fingerprint: true
+            }
+        }
     }
 }
