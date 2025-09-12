@@ -46,15 +46,6 @@ pipeline {
             post {
                 always {
                     echo '📊 Test raporu oluşturuldu: reports/test_report.html'
-                    // HTML raporunu Jenkins'te görüntülemek için publishHTML kullan
-                    publishHTML([
-                        allowMissing: false,
-                        alwaysLinkToLastBuild: true,
-                        keepAll: true,
-                        reportDir: 'reports',
-                        reportFiles: 'test_report.html',
-                        reportName: 'Pytest HTML Report'
-                    ])
                 }
             }
         }
@@ -76,16 +67,6 @@ pipeline {
                     publishAllureResults([
                         results: [[path: 'allure-results']],
                         reportName: 'Allure Report'
-                    ])
-                    
-                    // HTML raporunu da ekle (opsiyonel)
-                    publishHTML([
-                        allowMissing: false,
-                        alwaysLinkToLastBuild: true,
-                        keepAll: true,
-                        reportDir: 'allure-report',
-                        reportFiles: 'index.html',
-                        reportName: 'Allure HTML Report'
                     ])
                 }
             }
@@ -143,8 +124,6 @@ pipeline {
                     <h3>📊 Raporlar:</h3>
                     <ul>
                         <li><a href="${BUILD_URL}allure/">Allure Raporu</a></li>
-                        <li><a href="${BUILD_URL}Allure_HTML_Report/">Allure HTML Raporu</a></li>
-                        <li><a href="${BUILD_URL}Pytest_HTML_Report/">Pytest HTML Raporu</a></li>
                     </ul>
                     """,
                     to: "test-team@company.com"
@@ -168,8 +147,6 @@ pipeline {
                     <h3>📊 Raporlar:</h3>
                     <ul>
                         <li><a href="${BUILD_URL}allure/">Allure Raporu</a></li>
-                        <li><a href="${BUILD_URL}Allure_HTML_Report/">Allure HTML Raporu</a></li>
-                        <li><a href="${BUILD_URL}Pytest_HTML_Report/">Pytest HTML Raporu</a></li>
                     </ul>
                     
                     <p>Lütfen logları kontrol edin ve gerekli düzeltmeleri yapın.</p>
