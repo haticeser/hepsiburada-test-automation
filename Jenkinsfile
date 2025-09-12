@@ -46,6 +46,15 @@ pipeline {
             post {
                 always {
                     echo '📊 Test raporu oluşturuldu: reports/test_report.html'
+                    // HTML raporunu Jenkins'te görüntülemek için publishHTML kullan
+                    publishHTML([
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: 'reports',
+                        reportFiles: 'test_report.html',
+                        reportName: 'Pytest HTML Report'
+                    ])
                 }
             }
         }
@@ -59,6 +68,25 @@ pipeline {
                     
                     // Allure raporunu arşivle (Windows için PowerShell kullan)
                     bat 'powershell -Command "Compress-Archive -Path allure-report -DestinationPath allure-report.zip -Force"'
+                }
+            }
+            post {
+                always {
+                    // Allure Reports plugin'ini kullan
+                    publishAllureResults([
+                        results: [[path: 'allure-results']],
+                        reportName: 'Allure Report'
+                    ])
+                    
+                    // HTML raporunu da ekle (opsiyonel)
+                    publishHTML([
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: 'allure-report',
+                        reportFiles: 'index.html',
+                        reportName: 'Allure HTML Report'
+                    ])
                 }
             }
         }
@@ -94,9 +122,7 @@ pipeline {
                 
                 // Artifacts arşivle
                 echo '📦 Artifacts arşivleniyor...'
-                archiveArtifacts artifacts: 'allure-report.zip', fingerprint: true
                 archiveArtifacts artifacts: 'reports/*.html', fingerprint: true
-                archiveArtifacts artifacts: 'screenshots.zip', fingerprint: true
                 archiveArtifacts artifacts: 'test_summary.txt', fingerprint: true
             }
         }
@@ -117,7 +143,8 @@ pipeline {
                     <h3>📊 Raporlar:</h3>
                     <ul>
                         <li><a href="${BUILD_URL}allure/">Allure Raporu</a></li>
-                        <li><a href="${BUILD_URL}HTML_Report/">HTML Raporları</a></li>
+                        <li><a href="${BUILD_URL}Allure_HTML_Report/">Allure HTML Raporu</a></li>
+                        <li><a href="${BUILD_URL}Pytest_HTML_Report/">Pytest HTML Raporu</a></li>
                     </ul>
                     """,
                     to: "test-team@company.com"
@@ -141,7 +168,8 @@ pipeline {
                     <h3>📊 Raporlar:</h3>
                     <ul>
                         <li><a href="${BUILD_URL}allure/">Allure Raporu</a></li>
-                        <li><a href="${BUILD_URL}HTML_Report/">HTML Raporları</a></li>
+                        <li><a href="${BUILD_URL}Allure_HTML_Report/">Allure HTML Raporu</a></li>
+                        <li><a href="${BUILD_URL}Pytest_HTML_Report/">Pytest HTML Raporu</a></li>
                     </ul>
                     
                     <p>Lütfen logları kontrol edin ve gerekli düzeltmeleri yapın.</p>
