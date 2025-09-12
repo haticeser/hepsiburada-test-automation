@@ -39,16 +39,16 @@ pip install -r requirements.txt
 ```batch
 @echo off
 echo Testler çalıştırılıyor...
-pytest tests/test_smoke.py -v --tb=short --alluredir=allure-results --html=reports/test_report.html --self-contained-html
+python tests/test_smoke.py
 ```
 
-**⚠️ ÖNEMLİ:** `--alluredir=allure-results` parametresi mutlaka olmalı!
+**⚠️ ÖNEMLİ:** Artık pytest yerine direkt Python ile çalıştırıyoruz!
 
 #### Build Step 3: Allure Report Generation (Opsiyonel)
 ```batch
 @echo off
 echo Allure raporu oluşturuluyor...
-allure generate allure-results -o allure-report --clean
+echo Not: Freestyle versiyon Allure raporu oluşturmaz, sadece konsol çıktısı verir
 ```
 
 #### Build Step 4: Test Summary (Opsiyonel)
@@ -65,11 +65,10 @@ echo Test özeti oluşturuldu: test_summary.txt
 
 ### 4. Post-build Actions Ayarları
 
-#### 4.1 Allure Report (ANA ÖNEMLİ!)
-1. **"Add post-build action"** > **"Allure Report"** seçin
-2. **Results path:** `allure-results` (mutlaka bu olmalı!)
-3. **Report path:** `allure-report` (opsiyonel)
-4. **Keep results:** ✅ (işaretli bırakın)
+#### 4.1 Allure Report (FREESTYLE VERSİYON İÇİN DEVRE DIŞI)
+1. **Not:** Freestyle versiyon Allure raporu oluşturmaz
+2. **Alternatif:** Konsol çıktısından test sonuçlarını takip edin
+3. **Gelecek:** Allure entegrasyonu için pytest versiyonu kullanılabilir
 
 #### 4.2 Publish HTML reports (Opsiyonel)
 1. **"Add post-build action"** > **"Publish HTML reports"** seçin
