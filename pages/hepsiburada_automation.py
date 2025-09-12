@@ -54,3 +54,12 @@ class HepsiburadaAutomation:
     def run_full_login_test(self):
         """Tam giriş testi - tüm adımlar"""
         return self.workflow_manager.run_full_login_test()
+    
+    def run_product_test(self):
+        """Ürün testi - run_product_selection_test için alias"""
+        return self.run_product_selection_test()
+    
+    def run_registration_test(self):
+        """Üye kaydı testi - şu anda desteklenmiyor"""
+        print("⚠️ Üye kaydı testi şu anda desteklenmiyor")
+        return False
