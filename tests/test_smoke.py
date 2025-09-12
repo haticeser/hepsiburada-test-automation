@@ -184,7 +184,7 @@ class TestFullAutomation:
 @pytest.mark.smoke
 @allure.feature("Ürün Testleri")
 @allure.story("Ürün Seçimi")
-@allure.severity(allure.severity_level.HIGH)
+@allure.severity(allure.severity_level.NORMAL)
 def test_product_selection(automation):
     """Ürün seçimi testi"""
     with allure.step("Ürün seçimi testi çalıştırılıyor"):
@@ -196,7 +196,7 @@ def test_product_selection(automation):
 @pytest.mark.smoke
 @allure.feature("Kullanıcı Testleri")
 @allure.story("Kullanıcı Kaydı")
-@allure.severity(allure.severity_level.MEDIUM)
+@allure.severity(allure.severity_level.NORMAL)
 def test_user_registration(automation):
     """Kullanıcı kaydı testi"""
     with allure.step("Kullanıcı kaydı testi çalıştırılıyor"):
