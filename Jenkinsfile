@@ -1,58 +1,67 @@
-# FREESTYLE JOB İÇİN KOMUTLAR
-# Bu dosya freestyle job'da kullanılacak komutları içerir
+# ========================================
+# HEPBİRADURA TEST AUTOMATION - JENKINS SETUP
+# ========================================
+# Bu dosya Jenkins freestyle job kurulumu için hazırlanmıştır
 # Pipeline job yerine freestyle job kullanın
 
 # ========================================
-# 1. BUILD STEPS (Build Steps)
+# 1. BUILD STEPS (Jenkins'te Execute Windows batch command olarak ekleyin)
 # ========================================
 
-# Python sürümünü kontrol et
+# Build Step 1: Environment Setup
+@echo off
+echo ========================================
+echo HEPBİRADURA TEST AUTOMATION BAŞLATILIYOR
+echo ========================================
+echo.
+
+echo Python sürümü kontrol ediliyor...
 python --version
 
-# Gerekli dizinleri oluştur
+echo.
+echo Gerekli dizinler oluşturuluyor...
 if not exist allure-results mkdir allure-results
 if not exist reports mkdir reports
 if not exist screenshots mkdir screenshots
 
-# Bağımlılıkları yükle
+echo.
+echo Bağımlılıklar yükleniyor...
 pip install -r requirements.txt
 
-# Testleri çalıştır - Allure results için önemli parametreler
+# Build Step 2: Test Execution (ÖNEMLİ!)
+@echo off
+echo.
+echo ========================================
+echo TESTLER ÇALIŞTIRILIYOR
+echo ========================================
+echo.
 pytest tests/test_smoke.py -v --tb=short --alluredir=allure-results --html=reports/test_report.html --self-contained-html
 
-# Allure raporu oluştur (opsiyonel - freestyle job'da Allure Reports plugin otomatik yapar)
+# Build Step 3: Allure Report Generation
+@echo off
+echo.
+echo ========================================
+echo ALLURE RAPORU OLUŞTURULUYOR
+echo ========================================
+echo.
 allure generate allure-results -o allure-report --clean
 
-# Test özeti oluştur
-echo === TEST ÖZETİ === > test_summary.txt
-echo Tarih: %date% %time% >> test_summary.txt
-echo Branch: %GIT_BRANCH% >> test_summary.txt
-echo Commit: %GIT_COMMIT% >> test_summary.txt
-echo. >> test_summary.txt
-echo === PYTEST SONUÇLARI === >> test_summary.txt
-pytest --collect-only -q >> test_summary.txt 2>&1
-
 # ========================================
-# 2. POST-BUILD ACTIONS (Yapılandırma Sonrası Aksiyonlar)
+# 2. POST-BUILD ACTIONS (Jenkins'te Post-build Actions bölümünde ekleyin)
 # ========================================
 
-# A) Allure Report
+# A) Allure Report (ANA ÖNEMLİ!)
 # - Plugin: Allure Report
 # - Results path: allure-results
-# - Report path: allure-report (opsiyonel)
+# - Report path: allure-report
 
-# B) Publish HTML reports (opsiyonel)
+# B) Publish HTML reports (Opsiyonel)
 # - HTML directory to archive: reports
 # - Index page[s]: test_report.html
 # - Report title: Pytest HTML Report
 
 # C) Archive the artifacts
-# - Files to archive: reports/*.html, test_summary.txt, allure-report.zip
-
-# D) Email Notification (opsiyonel)
-# - Recipients: test-team@company.com
-# - Subject: ${PROJECT_NAME} - Build #${BUILD_NUMBER} - ${BUILD_STATUS}
-# - Body: Test sonuçları ve rapor linkleri
+# - Files to archive: reports/*.html
 
 # ========================================
 # 3. FREESTYLE JOB KURULUM ADIMLARI
@@ -63,33 +72,38 @@ pytest --collect-only -q >> test_summary.txt 2>&1
 #    - Repository URL: https://github.com/haticeser/hepsiburada-test-automation.git
 #    - Branch: main
 # 3. Build Steps: "Execute Windows batch command" ekleyin
-#    - Yukarıdaki komutları tek tek ekleyin
+#    - Yukarıdaki 3 komutu tek tek ekleyin
 # 4. Post-build Actions:
-#    - "Allure Report" ekleyin
-#      * Results path: allure-results
-#      * Report path: allure-report
-#    - "Publish HTML reports" ekleyin (opsiyonel)
-#      * HTML directory: reports
-#      * Index page: test_report.html
-#      * Report title: Pytest HTML Report
-#    - "Archive the artifacts" ekleyin
-#      * Files to archive: reports/*.html, test_summary.txt
+#    - "Allure Report" ekleyin (Results path: allure-results)
+#    - "Publish HTML reports" ekleyin (HTML directory: reports)
+#    - "Archive the artifacts" ekleyin (Files: reports/*.html)
 
 # ========================================
-# 4. ALLURE RAPORU İÇİN ÖNEMLİ NOTLAR
+# 4. BAŞARI KRİTERLERİ
 # ========================================
 
-# Allure raporunun dolu görünmesi için:
-# 1. pytest komutunda --alluredir=allure-results parametresi OLMALI
-# 2. allure-results dizininde JSON dosyaları oluşmalı
-# 3. Jenkins'te Allure Reports plugin yüklü olmalı
-# 4. Post-build Action'da Results path: allure-results olmalı
+# ✅ Job başarıyla çalışır
+# ✅ Test geçer (6-7 dakika sürer)
+# ✅ Sol menüde "Allure Report" linki görünür
+# ✅ Allure raporunda tüm bölümler dolu:
+#    - Overview: Test özeti
+#    - Categories: Test kategorileri
+#    - Suites: Test suite'leri
+#    - Graphs: Test grafikleri
+#    - Timeline: Zaman çizelgesi
+#    - Behaviors: Test adımları
+#    - Packages: Test paketleri
 
-# Test sonuçları şu bölümleri dolduracak:
-# - Overview: Test özeti ve genel bilgiler
-# - Categories: Test kategorileri (smoke, regression, vb.)
-# - Suites: Test suite'leri
-# - Graphs: Test sonuç grafikleri
-# - Timeline: Test çalışma zaman çizelgesi
-# - Behaviors: Test davranışları ve adımları
-# - Packages: Test paket yapısı
+# ========================================
+# 5. SORUN GİDERME
+# ========================================
+
+# Allure raporu boşsa:
+# 1. pytest komutunda --alluredir=allure-results parametresi olduğunu kontrol edin
+# 2. allure-results dizininde JSON dosyaları oluştuğunu kontrol edin
+# 3. Jenkins'te Allure Reports plugin yüklü olduğunu kontrol edin
+
+# Test çalışmıyorsa:
+# 1. Python ve pip yüklü olduğunu kontrol edin
+# 2. requirements.txt dosyasının mevcut olduğunu kontrol edin
+# 3. tests/test_smoke.py dosyasının mevcut olduğunu kontrol edin
