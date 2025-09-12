@@ -38,7 +38,7 @@ class TestSmoke:
     
     @allure.feature("Üye Kaydı")
     @allure.story("Kullanıcı Kaydı")
-    @allure.severity(allure.severity_level.HIGH)
+    @allure.severity(allure.severity_level.NORMAL)
     @allure.issue("HEPS-002", "Üye kaydı testi")
     @allure.testcase("TC-002", "Hepsiburada üye kaydı test senaryosu")
     @pytest.mark.regression
@@ -53,7 +53,7 @@ class TestSmoke:
     
     @allure.feature("Ürün Seçimi")
     @allure.story("E-ticaret İşlemleri")
-    @allure.severity(allure.severity_level.MEDIUM)
+    @allure.severity(allure.severity_level.MINOR)
     @allure.issue("HEPS-003", "Ürün seçimi testi")
     @allure.testcase("TC-003", "Hepsiburada ürün seçimi test senaryosu")
     @pytest.mark.product
