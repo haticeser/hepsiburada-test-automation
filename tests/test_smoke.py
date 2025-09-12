@@ -17,6 +17,9 @@ class TestSmoke:
     @allure.feature("Tam Otomasyon")
     @allure.story("End-to-End Test")
     @allure.severity(allure.severity_level.CRITICAL)
+    @allure.issue("HEPS-001", "Tam otomasyon testi")
+    @allure.testcase("TC-001", "Hepsiburada tam otomasyon test senaryosu")
+    @pytest.mark.smoke
     @pytest.mark.slow
     def test_full_automation(self, automation):
         """Tam otomasyon sürecini test eder - End-to-End"""
@@ -32,4 +35,34 @@ class TestSmoke:
             name="Test Sonucu",
             attachment_type=allure.attachment_type.TEXT
         )
+    
+    @allure.feature("Üye Kaydı")
+    @allure.story("Kullanıcı Kaydı")
+    @allure.severity(allure.severity_level.HIGH)
+    @allure.issue("HEPS-002", "Üye kaydı testi")
+    @allure.testcase("TC-002", "Hepsiburada üye kaydı test senaryosu")
+    @pytest.mark.regression
+    def test_user_registration(self, automation):
+        """Üye kaydı testini çalıştırır"""
+        with allure.step("Üye kaydı testi başlatılıyor"):
+            result = automation.run_registration_test()
+            
+        with allure.step("Üye kaydı sonucu kontrol ediliyor"):
+            assert result is not None, "Üye kaydı testi sonucu None döndü"
+            assert result, f"Üye kaydı başarısız: {result}"
+    
+    @allure.feature("Ürün Seçimi")
+    @allure.story("E-ticaret İşlemleri")
+    @allure.severity(allure.severity_level.MEDIUM)
+    @allure.issue("HEPS-003", "Ürün seçimi testi")
+    @allure.testcase("TC-003", "Hepsiburada ürün seçimi test senaryosu")
+    @pytest.mark.product
+    def test_product_selection(self, automation):
+        """Ürün seçimi testini çalıştırır"""
+        with allure.step("Ürün seçimi testi başlatılıyor"):
+            result = automation.run_product_test()
+            
+        with allure.step("Ürün seçimi sonucu kontrol ediliyor"):
+            assert result is not None, "Ürün seçimi testi sonucu None döndü"
+            assert result, f"Ürün seçimi başarısız: {result}"
     
