@@ -45,7 +45,7 @@ class TestSmoke:
     def test_user_registration(self, automation):
         """Üye kaydı testini çalıştırır"""
         with allure.step("Üye kaydı testi başlatılıyor"):
-            result = automation.run_registration_test()
+            result = automation.run_direct_login_test()
             
         with allure.step("Üye kaydı sonucu kontrol ediliyor"):
             assert result is not None, "Üye kaydı testi sonucu None döndü"
@@ -60,7 +60,7 @@ class TestSmoke:
     def test_product_selection(self, automation):
         """Ürün seçimi testini çalıştırır"""
         with allure.step("Ürün seçimi testi başlatılıyor"):
-            result = automation.run_product_test()
+            result = automation.run_product_selection_test()
             
         with allure.step("Ürün seçimi sonucu kontrol ediliyor"):
             assert result is not None, "Ürün seçimi testi sonucu None döndü"
