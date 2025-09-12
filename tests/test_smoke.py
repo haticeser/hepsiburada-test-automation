@@ -140,50 +140,57 @@ class TestFullAutomation:
     def test_step_7_increase_quantity(self, automation):
         """Adım 7: Ürün sayısını arttırma"""
         with allure.step("Sepetteki ürün sayısı arttırılıyor"):
-            print("➕ Sepetteki ürün sayısı arttırılıyor...")
-            assert True  # Geçici olarak True döndürüyoruz
+            result = automation.run_increase_quantity_test()
+            assert result is not None, "Ürün sayısını arttırma testi sonucu None döndü"
+            assert result, f"Ürün sayısını arttırma testi başarısız: {result}"
     
     @allure.step("Alışverişi Tamamlama")
     def test_step_8_complete_shopping(self, automation):
         """Adım 8: Alışverişi tamamlama"""
         with allure.step("Alışverişi tamamla butonuna basılıyor"):
-            print("🛒 Alışverişi tamamla butonuna basılıyor...")
-            assert True  # Geçici olarak True döndürüyoruz
+            result = automation.run_complete_shopping_test()
+            assert result is not None, "Alışverişi tamamlama testi sonucu None döndü"
+            assert result, f"Alışverişi tamamlama testi başarısız: {result}"
     
     @allure.step("Yeni Adres Ekleme")
     def test_step_9_add_address(self, automation):
         """Adım 9: Yeni adres ekleme"""
         with allure.step("Yeni adres ekle butonuna tıklanıyor"):
-            print("📍 Yeni adres ekle butonuna tıklanıyor...")
-            assert True  # Geçici olarak True döndürüyoruz
+            result = automation.run_add_address_test()
+            assert result is not None, "Yeni adres ekleme testi sonucu None döndü"
+            assert result, f"Yeni adres ekleme testi başarısız: {result}"
     
     @allure.step("Adres Formu Doldurma")
     def test_step_10_fill_address_form(self, automation):
         """Adım 10: Adres formu doldurma"""
         with allure.step("Adres formu dolduruluyor"):
-            print("📝 Adres formu dolduruluyor...")
-            assert True  # Geçici olarak True döndürüyoruz
+            result = automation.run_fill_address_form_test()
+            assert result is not None, "Adres formu doldurma testi sonucu None döndü"
+            assert result, f"Adres formu doldurma testi başarısız: {result}"
     
     @allure.step("Kart Bilgilerini Girme")
     def test_step_11_enter_card_info(self, automation):
         """Adım 11: Kart bilgilerini girme"""
         with allure.step("Kart bilgilerini gir butonuna tıklanıyor"):
-            print("💳 Kart bilgilerini gir butonuna tıklanıyor...")
-            assert True  # Geçici olarak True döndürüyoruz
+            result = automation.run_enter_card_info_test()
+            assert result is not None, "Kart bilgilerini girme testi sonucu None döndü"
+            assert result, f"Kart bilgilerini girme testi başarısız: {result}"
     
     @allure.step("Kart Formu Doldurma")
     def test_step_12_fill_card_form(self, automation):
         """Adım 12: Kart formu doldurma"""
         with allure.step("Kart formu dolduruluyor"):
-            print("💳 Kart formu dolduruluyor...")
-            assert True  # Geçici olarak True döndürüyoruz
+            result = automation.run_fill_card_form_test()
+            assert result is not None, "Kart formu doldurma testi sonucu None döndü"
+            assert result, f"Kart formu doldurma testi başarısız: {result}"
     
     @allure.step("Siparişi Onaylama")
     def test_step_13_confirm_order(self, automation):
         """Adım 13: Siparişi onaylama"""
         with allure.step("Siparişi onayla butonuna basılıyor"):
-            print("✅ Siparişi onayla butonuna basılıyor...")
-            assert True  # Geçici olarak True döndürüyoruz
+            result = automation.run_confirm_order_test()
+            assert result is not None, "Siparişi onaylama testi sonucu None döndü"
+            assert result, f"Siparişi onaylama testi başarısız: {result}"
 
 
 # ============================================================================

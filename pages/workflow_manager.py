@@ -558,3 +558,129 @@ class WorkflowManager:
         except Exception as e:
             print(f"⚠️ Fare imleci taşıma hatası (devam ediliyor): {e}")
             return True  # Bu hata kritik değil, devam edebiliriz
+    
+    def run_increase_quantity_test(self):
+        """Ürün sayısını arttırma testi"""
+        try:
+            print("➕ Ürün sayısını arttırma testi başlatılıyor...")
+            
+            # Sepet sayfasında olduğumuzu kontrol et
+            current_url = self.driver.current_url
+            if "sepet" not in current_url.lower() and "cart" not in current_url.lower():
+                print("⚠️ Sepet sayfasında değiliz, sepete gidiliyor...")
+                if not self.hepsiburada_page.go_to_cart():
+                    return False
+            
+            # Ürün sayısını arttır butonunu bul ve tıkla
+            if not self.hepsiburada_page.increase_product_quantity():
+                print("❌ Ürün sayısı arttırılamadı")
+                return False
+            
+            print("✅ Ürün sayısı başarıyla arttırıldı")
+            return True
+            
+        except Exception as e:
+            print(f"❌ Ürün sayısını arttırma hatası: {e}")
+            return False
+    
+    def run_complete_shopping_test(self):
+        """Alışverişi tamamlama testi"""
+        try:
+            print("🛒 Alışverişi tamamlama testi başlatılıyor...")
+            
+            # "Alışverişi Tamamla" butonunu bul ve tıkla
+            if not self.hepsiburada_page.click_complete_shopping():
+                print("❌ Alışverişi tamamla butonu bulunamadı")
+                return False
+            
+            print("✅ Alışverişi tamamla butonuna tıklandı")
+            return True
+            
+        except Exception as e:
+            print(f"❌ Alışverişi tamamlama hatası: {e}")
+            return False
+    
+    def run_add_address_test(self):
+        """Yeni adres ekleme testi"""
+        try:
+            print("📍 Yeni adres ekleme testi başlatılıyor...")
+            
+            # "Yeni Adres Ekle" butonunu bul ve tıkla
+            if not self.hepsiburada_page.click_add_new_address():
+                print("❌ Yeni adres ekle butonu bulunamadı")
+                return False
+            
+            print("✅ Yeni adres ekle butonuna tıklandı")
+            return True
+            
+        except Exception as e:
+            print(f"❌ Yeni adres ekleme hatası: {e}")
+            return False
+    
+    def run_fill_address_form_test(self):
+        """Adres formu doldurma testi"""
+        try:
+            print("📝 Adres formu doldurma testi başlatılıyor...")
+            
+            # Adres formunu doldur
+            if not self.hepsiburada_page.fill_address_form():
+                print("❌ Adres formu doldurulamadı")
+                return False
+            
+            print("✅ Adres formu başarıyla dolduruldu")
+            return True
+            
+        except Exception as e:
+            print(f"❌ Adres formu doldurma hatası: {e}")
+            return False
+    
+    def run_enter_card_info_test(self):
+        """Kart bilgilerini girme testi"""
+        try:
+            print("💳 Kart bilgilerini girme testi başlatılıyor...")
+            
+            # "Kart Bilgilerini Gir" butonunu bul ve tıkla
+            if not self.hepsiburada_page.click_enter_card_info():
+                print("❌ Kart bilgilerini gir butonu bulunamadı")
+                return False
+            
+            print("✅ Kart bilgilerini gir butonuna tıklandı")
+            return True
+            
+        except Exception as e:
+            print(f"❌ Kart bilgilerini girme hatası: {e}")
+            return False
+    
+    def run_fill_card_form_test(self):
+        """Kart formu doldurma testi"""
+        try:
+            print("💳 Kart formu doldurma testi başlatılıyor...")
+            
+            # Kart formunu doldur
+            if not self.hepsiburada_page.fill_card_form():
+                print("❌ Kart formu doldurulamadı")
+                return False
+            
+            print("✅ Kart formu başarıyla dolduruldu")
+            return True
+            
+        except Exception as e:
+            print(f"❌ Kart formu doldurma hatası: {e}")
+            return False
+    
+    def run_confirm_order_test(self):
+        """Siparişi onaylama testi"""
+        try:
+            print("✅ Siparişi onaylama testi başlatılıyor...")
+            
+            # Siparişi onayla butonunu bul ve tıkla
+            if not self.hepsiburada_page.click_confirm_order():
+                print("❌ Siparişi onayla butonu bulunamadı")
+                return False
+            
+            print("✅ Siparişi onayla butonuna tıklandı")
+            return True
+            
+        except Exception as e:
+            print(f"❌ Siparişi onaylama hatası: {e}")
+            return False

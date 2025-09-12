@@ -63,3 +63,31 @@ class HepsiburadaAutomation:
         """Üye kaydı testi - şu anda desteklenmiyor"""
         print("⚠️ Üye kaydı testi şu anda desteklenmiyor")
         return False
+    
+    def run_increase_quantity_test(self):
+        """Ürün sayısını arttırma testi"""
+        return self.workflow_manager.run_increase_quantity_test()
+    
+    def run_complete_shopping_test(self):
+        """Alışverişi tamamlama testi"""
+        return self.workflow_manager.run_complete_shopping_test()
+    
+    def run_add_address_test(self):
+        """Yeni adres ekleme testi"""
+        return self.workflow_manager.run_add_address_test()
+    
+    def run_fill_address_form_test(self):
+        """Adres formu doldurma testi"""
+        return self.workflow_manager.run_fill_address_form_test()
+    
+    def run_enter_card_info_test(self):
+        """Kart bilgilerini girme testi"""
+        return self.workflow_manager.run_enter_card_info_test()
+    
+    def run_fill_card_form_test(self):
+        """Kart formu doldurma testi"""
+        return self.workflow_manager.run_fill_card_form_test()
+    
+    def run_confirm_order_test(self):
+        """Siparişi onaylama testi"""
+        return self.workflow_manager.run_confirm_order_test()

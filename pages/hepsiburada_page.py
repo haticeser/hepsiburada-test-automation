@@ -212,3 +212,87 @@ class HepsiburadaPage:
     def confirm_order(self):
         """Siparişi onaylar"""
         return self.cart.confirm_order()
+    
+    def go_to_cart(self):
+        """Sepet sayfasına gider"""
+        try:
+            print("🛒 Sepet sayfasına gidiliyor...")
+            # Sepet linkini bul ve tıkla
+            cart_link = self.driver.find_element(By.CSS_SELECTOR, "a[href*='sepet']")
+            cart_link.click()
+            time.sleep(2)
+            print("✅ Sepet sayfasına gidildi")
+            return True
+        except Exception as e:
+            print(f"❌ Sepet sayfasına gitme hatası: {e}")
+            return False
+    
+    def increase_product_quantity(self):
+        """Sepetteki ürün sayısını arttırır"""
+        try:
+            print("➕ Ürün sayısı arttırılıyor...")
+            # + butonunu bul ve tıkla
+            plus_button = self.driver.find_element(By.CSS_SELECTOR, "button[class*='plus']")
+            plus_button.click()
+            time.sleep(1)
+            print("✅ Ürün sayısı arttırıldı")
+            return True
+        except Exception as e:
+            print(f"❌ Ürün sayısı arttırma hatası: {e}")
+            return False
+    
+    def click_complete_shopping(self):
+        """Alışverişi tamamla butonuna tıklar"""
+        try:
+            print("🛒 Alışverişi tamamla butonuna tıklanıyor...")
+            # Alışverişi tamamla butonunu bul ve tıkla
+            complete_button = self.driver.find_element(By.CSS_SELECTOR, "button[class*='complete']")
+            complete_button.click()
+            time.sleep(2)
+            print("✅ Alışverişi tamamla butonuna tıklandı")
+            return True
+        except Exception as e:
+            print(f"❌ Alışverişi tamamlama hatası: {e}")
+            return False
+    
+    def click_add_new_address(self):
+        """Yeni adres ekle butonuna tıklar"""
+        try:
+            print("📍 Yeni adres ekle butonuna tıklanıyor...")
+            # Yeni adres ekle butonunu bul ve tıkla
+            add_address_button = self.driver.find_element(By.CSS_SELECTOR, "button[class*='add-address']")
+            add_address_button.click()
+            time.sleep(2)
+            print("✅ Yeni adres ekle butonuna tıklandı")
+            return True
+        except Exception as e:
+            print(f"❌ Yeni adres ekleme hatası: {e}")
+            return False
+    
+    def click_enter_card_info(self):
+        """Kart bilgilerini gir butonuna tıklar"""
+        try:
+            print("💳 Kart bilgilerini gir butonuna tıklanıyor...")
+            # Kart bilgilerini gir butonunu bul ve tıkla
+            card_button = self.driver.find_element(By.CSS_SELECTOR, "button[class*='card']")
+            card_button.click()
+            time.sleep(2)
+            print("✅ Kart bilgilerini gir butonuna tıklandı")
+            return True
+        except Exception as e:
+            print(f"❌ Kart bilgilerini girme hatası: {e}")
+            return False
+    
+    def click_confirm_order(self):
+        """Siparişi onayla butonuna tıklar"""
+        try:
+            print("✅ Siparişi onayla butonuna tıklanıyor...")
+            # Siparişi onayla butonunu bul ve tıkla
+            confirm_button = self.driver.find_element(By.CSS_SELECTOR, "button[class*='confirm']")
+            confirm_button.click()
+            time.sleep(2)
+            print("✅ Siparişi onayla butonuna tıklandı")
+            return True
+        except Exception as e:
+            print(f"❌ Siparişi onaylama hatası: {e}")
+            return False
