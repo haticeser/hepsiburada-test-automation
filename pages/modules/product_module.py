@@ -429,10 +429,28 @@ class ProductModule(BasePage):
         # Kısa bir bekleme daha
         time.sleep(1)
         
-        # 1. Kullanıcının verdiği spesifik XPath ile "Sepete Ekle" butonunu bul
+        # 1. Data-test-id ile "Sepete Ekle" butonunu bul (en güvenilir)
+        try:
+            print("🎯 Data-test-id ile 'Sepete Ekle' butonu aranıyor...")
+            element = WebDriverWait(self.driver, 5).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "[data-test-id='add-to-cart-button-1']"))
+            )
+            
+            # JavaScript ile tıklama - loading wrapper'ı bypass eder
+            print("🖱️ JavaScript ile tıklama yapılıyor...")
+            self.driver.execute_script("arguments[0].click();", element)
+            print("✅ İlk ürünün 'Sepete Ekle' butonuna tıklandı (data-test-id)")
+            time.sleep(3)
+            return True
+        except TimeoutException:
+            print("⚠️ Data-test-id ile bulunamadı, XPath deneniyor...")
+        except Exception as e:
+            print(f"❌ Data-test-id hatası: {e}")
+        
+        # 2. Kullanıcının verdiği spesifik XPath ile "Sepete Ekle" butonunu bul
         try:
             print("🎯 Kullanıcının verdiği XPath ile 'Sepete Ekle' butonu aranıyor...")
-            xpath = "/html/body/div[1]/main/div/div[1]/div/div[2]/div[3]/div/div[2]/div/div/div/div/div/div/ul/li[1]/article/a/div/div[3]"
+            xpath = "/html/body/div[1]/main/div/div[2]/div/div[2]/div[3]/div/div[2]/div/div/div/div/div/div/ul/li[1]/article/a/div/div[4]"
             element = WebDriverWait(self.driver, 5).until(
                 EC.presence_of_element_located((By.XPATH, xpath))
             )
@@ -440,7 +458,7 @@ class ProductModule(BasePage):
             # JavaScript ile tıklama - loading wrapper'ı bypass eder
             print("🖱️ JavaScript ile tıklama yapılıyor...")
             self.driver.execute_script("arguments[0].click();", element)
-            print("✅ İlk ürünün 'Sepete Ekle' butonuna tıklandı (JavaScript)")
+            print("✅ İlk ürünün 'Sepete Ekle' butonuna tıklandı (XPath)")
             time.sleep(3)
             return True
         except TimeoutException:
@@ -448,7 +466,7 @@ class ProductModule(BasePage):
         except Exception as e:
             print(f"❌ Kullanıcı XPath hatası: {e}")
         
-        # 2. Filtrelenmiş sayfada ilk ürünün "Sepete Ekle" butonunu bul (alternatif)
+        # 3. Filtrelenmiş sayfada ilk ürünün "Sepete Ekle" butonunu bul (alternatif)
         try:
             # Önce ürün listesi container'ını bul
             product_container_selectors = [
