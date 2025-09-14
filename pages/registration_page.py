@@ -44,35 +44,70 @@ class RegistrationPage(BasePage):
         """Devam et butonuna tıklar"""
         print("⏭️ 'Devam et' butonuna tıklanıyor...")
         
-        try:
-            # Önce en yaygın selector'ı dene (hızlı)
-            continue_button = WebDriverWait(self.driver, 5).until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR, "#btnSignUpSubmit"))
-            )
-            continue_button.click()
-            print("✅ 'Devam et' butonuna tıklandı (#btnSignUpSubmit)")
-            time.sleep(3)
-            return True
-        except:
-            pass
+        # Genişletilmiş selector listesi
+        continue_selectors = [
+            "#btnSignUpSubmit",
+            "button[type='submit']",
+            ".submit-btn",
+            "input[type='submit']",
+            "button[data-testid*='continue']",
+            "button[class*='continue']",
+            "input[value*='Devam']",
+            "input[value*='Continue']",
+            ".btn-continue",
+            ".continue-button",
+            "[data-testid*='continue']",
+            "[data-testid*='submit']",
+            "button[class*='submit']",
+            "button[class*='continue']",
+            "button[class*='btn']",
+            ".btn-primary",
+            ".btn-submit"
+        ]
         
-        try:
-            # Alternatif selector'ları hızlıca dene
-            continue_selectors = [
-                "button[type='submit']",
-                ".submit-btn",
-                "input[type='submit']"
-            ]
-            
-            for selector in continue_selectors:
-                try:
-                    continue_button = WebDriverWait(self.driver, 2).until(
-                        EC.element_to_be_clickable((By.CSS_SELECTOR, selector))
-                    )
+        for selector in continue_selectors:
+            try:
+                continue_button = WebDriverWait(self.driver, 3).until(
+                    EC.element_to_be_clickable((By.CSS_SELECTOR, selector))
+                )
+                if continue_button.is_displayed():
                     continue_button.click()
                     print(f"✅ 'Devam et' butonuna tıklandı ({selector})")
                     time.sleep(3)
                     return True
+            except:
+                continue
+        
+        # Text içeriğine göre arama
+        try:
+            buttons = self.driver.find_elements(By.TAG_NAME, "button")
+            for button in buttons:
+                try:
+                    button_text = button.text.lower()
+                    if "devam" in button_text or "continue" in button_text or "gönder" in button_text:
+                        if button.is_displayed() and button.is_enabled():
+                            button.click()
+                            print(f"✅ 'Devam et' butonuna tıklandı (text: {button.text})")
+                            time.sleep(3)
+                            return True
+                except:
+                    continue
+        except:
+            pass
+        
+        # Input elementlerini de kontrol et
+        try:
+            inputs = self.driver.find_elements(By.TAG_NAME, "input")
+            for input_elem in inputs:
+                try:
+                    input_type = input_elem.get_attribute("type")
+                    input_value = input_elem.get_attribute("value").lower()
+                    if input_type == "submit" or "devam" in input_value or "continue" in input_value:
+                        if input_elem.is_displayed() and input_elem.is_enabled():
+                            input_elem.click()
+                            print(f"✅ 'Devam et' butonuna tıklandı (input: {input_value})")
+                            time.sleep(3)
+                            return True
                 except:
                     continue
         except:
@@ -167,6 +202,11 @@ class RegistrationPage(BasePage):
     def enter_verification_code(self, verification_code):
         """Doğrulama kodunu girer"""
         print(f"🔐 Doğrulama kodu giriliyor: {verification_code}")
+        
+        # Çerez popup'ını kapat (sayfa yeniden yüklendikten sonra)
+        print("🍪 Çerez popup'ı kontrol ediliyor...")
+        self.close_cookie_popup()
+        time.sleep(2)  # Sayfa stabilizasyonu için bekle
         
         try:
             # En yaygın selector'ı dene (hızlı)
@@ -383,6 +423,11 @@ class RegistrationPage(BasePage):
     def click_final_signup_button(self):
         """Üye ol butonuna tıklar"""
         print("🔐 Üye ol butonuna tıklanıyor...")
+        
+        # Çerez popup'ını kapat (sayfa yeniden yüklendikten sonra)
+        print("🍪 Çerez popup'ı kontrol ediliyor...")
+        self.close_cookie_popup()
+        time.sleep(2)  # Sayfa stabilizasyonu için bekle
         
         try:
             # En yaygın selector'ı dene (hızlı)

@@ -3,65 +3,21 @@
 """
 Hepsiburada Test Otomasyonu - Özel Script
 Tests klasörü olmadan çalıştırılabilir versiyon
+WebDriver optimizasyonu ile hızlı çalışma
 """
 
 import sys
 import time
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
 
 # Pages modüllerini import et
 from pages.hepsiburada_automation import HepsiburadaAutomation
+from pages.driver_manager import driver_manager
 
 
 def setup_driver():
-    """Chrome WebDriver'ı kurar ve yapılandırır"""
-    print("🚀 Chrome WebDriver kuruluyor...")
-    
-    chrome_options = Options()
-    
-    # Anti-detection ayarları
-    chrome_options.add_argument("--disable-blink-features=AutomationControlled")
-    chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    chrome_options.add_experimental_option('useAutomationExtension', False)
-    
-    # Performans ve görünüm ayarları
-    chrome_options.add_argument("--start-maximized")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--disable-notifications")
-    
-    # GPU ve WebGL optimizasyonları (uyarıları minimize eder)
-    chrome_options.add_argument("--enable-unsafe-swiftshader")
-    chrome_options.add_argument("--disable-software-rasterizer")
-    chrome_options.add_argument("--disable-gpu-sandbox")
-    chrome_options.add_argument("--disable-gpu-process-crash-limit")
-    chrome_options.add_argument("--disable-background-timer-throttling")
-    chrome_options.add_argument("--disable-backgrounding-occluded-windows")
-    chrome_options.add_argument("--disable-renderer-backgrounding")
-    
-    # Log seviyesini azalt
-    chrome_options.add_argument("--log-level=3")
-    chrome_options.add_argument("--silent")
-    chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
-    chrome_options.add_experimental_option('useAutomationExtension', False)
-    
-    # Memory ve performans
-    chrome_options.add_argument("--memory-pressure-off")
-    chrome_options.add_argument("--max_old_space_size=4096")
-    
-    try:
-        # Manuel indirdiğin ChromeDriver 140 yolunu kullan
-        service = Service("C:/Users/eserh/hepsiburada_test_automation/drivers/chromedriver.exe")
-        driver = webdriver.Chrome(service=service, options=chrome_options)
-        print("✅ Chrome WebDriver 140 başarıyla kuruldu")
-        return driver
-    except Exception as e:
-        print(f"❌ ChromeDriver 140 hatası: {e}")
-        print("💡 ChromeDriver 140'ın doğru yerde olduğundan emin olun:")
-        print("   C:/Users/eserh/hepsiburada_test_automation/drivers/chromedriver.exe")
-        raise e
+    """Chrome WebDriver'ı kurar ve yapılandırır - Optimize edilmiş versiyon"""
+    print("🚀 WebDriver alınıyor... (tek seferlik kurulum)")
+    return driver_manager.get_driver_safely()
 
 
 def show_menu():
@@ -69,13 +25,16 @@ def show_menu():
     print("\n" + "="*60)
     print("🎯 Hepsiburada Test Otomasyonu - Özel Script")
     print("="*60)
-    print("1. 🚀 Tam Otomasyon (Üyelik + Ürün Seçimi)")
+    print("1. 🚀 Tam Otomasyon (Giriş + Laptop Kategorisi + Filtreleme + Ürün Seçimi + Sepete Ekleme + Sepetim + Ürün Sayısını Arttır + Alışverişi Tamamla + Yeni Adres Ekle + Adres Formu Doldur + Kart Bilgilerini Gir + Kart Formu Doldur + Siparişi Onayla)")
     print("2. 📝 Sadece Üye Kaydı")
     print("3. 🔑 Sadece Giriş Testi")
-    print("4. 🛍️ Sadece Ürün Seçimi")
-    print("5. 🎯 Filtreli Ürün Seçimi (Lenovo + Intel Core i7)")
-    print("6. 📧 Sadece Tempail Email Testi")
-    print("7. ❌ Çıkış")
+    print("4. 🔑 Direkt Giriş (viva.vista000@gmail.com)")
+    print("5. 🛍️ Sadece Ürün Seçimi")
+    print("6. 🎯 Filtreli Ürün Seçimi (Lenovo + Intel Core i7)")
+    print("7. 🛒 Sepete Ekleme Testi (Ürün Seçimi + Sepete Ekleme)")
+    print("8. 🎯 Adım Adım Test (XPath ile Giriş)")
+    print("9. 🔑 Tam Giriş Testi (Tüm Adımlar)")
+    print("10. ❌ Çıkış")
     print("="*60)
 
 
@@ -83,7 +42,22 @@ def run_full_automation(driver):
     """Tam otomasyon sürecini çalıştırır"""
     print("\n🚀 TAM OTOMASYON BAŞLATILIYOR...")
     print("="*50)
-    print("📋 Süreç: Tempail Email → Üye Kaydı → Ürün Seçimi")
+    print("📋 Süreç: Giriş Yap → Laptop Kategorisi → Filtreleme → Ürün Seçimi → Sepete Ekleme → Sepetim → Ürün Sayısını Arttır → Alışverişi Tamamla → Yeni Adres Ekle → Adres Formu Doldur → Kart Bilgilerini Gir → Kart Formu Doldur → Siparişi Onayla")
+    print("="*50)
+    print("🎯 Detaylı süreç:")
+    print("   1. 🔑 Hepsiburada'ya giriş yapılır (viva.vista000@gmail.com)")
+    print("   2. 🖥️ Laptop kategorisine gidilir")
+    print("   3. 🔍 Marka (Lenovo) ve işlemci (Intel Core i7) filtreleri uygulanır")
+    print("   4. 🎯 İlk filtrelenmiş ürün seçilir ve ürün sayfasına gidilir")
+    print("   5. 🛒 Ürün sepete eklenir")
+    print("   6. 🛒 Sepetim butonuna tıklanır")
+    print("   7. ➕ Sepetteki ürün sayısı +1 arttırılır")
+    print("   8. 🛒 Alışverişi tamamla butonuna basılır")
+    print("   9. 📍 Yeni adres ekle butonuna tıklanır")
+    print("   10-19. 📝 Adres formu doldurulur (Ad, Soyad, Telefon, İş yeri, Kapalı günler, Bina, Şehir, Örnek, Fatura, Kaydet)")
+    print("   20. 💳 Kart bilgilerini gir butonuna tıklanır")
+    print("   21-27. 💳 Kart formu doldurulur (Kart No, Ay/Yıl, CVC, İsim, Checkbox'lar, Devam et)")
+    print("   28-29. ✅ Siparişi onayla (Sözleşme checkbox + Siparişi onayla butonu)")
     print("="*50)
     
     automation = HepsiburadaAutomation(driver)
@@ -93,9 +67,6 @@ def run_full_automation(driver):
         
         if success:
             print("\n🎉 TAM OTOMASYON BAŞARILI!")
-            print(f"📧 Kullanılan Email: {automation.temp_email}")
-            print(f"🔒 Kullanılan Şifre: {automation.password}")
-            print(f"👤 Ad Soyad: {automation.first_name} {automation.last_name}")
         else:
             print("\n❌ TAM OTOMASYON BAŞARISIZ!")
             
@@ -112,75 +83,41 @@ def run_registration_only(driver):
     """Sadece üye kaydı işlemini çalıştırır"""
     print("\n📝 SADECE ÜYE KAYDI BAŞLATILIYOR...")
     print("="*50)
-    
-    automation = HepsiburadaAutomation(driver)
-    
-    try:
-        # 1. Tempail'den email al
-        print("📧 Geçici email alınıyor...")
-        automation.temp_email = automation.get_temp_email()
-        if not automation.temp_email:
-            print("❌ Geçici email alınamadı")
-            return False
-        
-        print(f"✅ Email alındı: {automation.temp_email}")
-        
-        # 2. Üye kaydı başlat
-        print("📝 Üye kaydı başlatılıyor...")
-        if not automation.register_on_hepsiburada():
-            print("❌ Üye kaydı başlatılamadı")
-            return False
-        
-        # 3. Doğrulama kodu bekle
-        print("📧 Doğrulama kodu bekleniyor...")
-        registration_code = automation.wait_for_email_with_code(120)
-        if not registration_code:
-            print("❌ Doğrulama kodu alınamadı")
-            return False
-        
-        print(f"✅ Doğrulama kodu alındı: {registration_code}")
-        
-        # 4. Üye kaydını tamamla
-        print("✅ Üye kaydı tamamlanıyor...")
-        success = automation.complete_registration_with_code(registration_code)
-        
-        if success:
-            print("\n🎉 ÜYE KAYDI BAŞARILI!")
-            print(f"📧 Email: {automation.temp_email}")
-            print(f"🔒 Şifre: {automation.password}")
-        else:
-            print("\n❌ ÜYE KAYDI BAŞARISIZ!")
-            
-        return success
-        
-    except Exception as e:
-        print(f"\n❌ Üye kaydı hatası: {e}")
-        import traceback
-        traceback.print_exc()
-        return False
+    print("⚠️ Bu test artık TempMail kullanmıyor - sabit email ile test yapın")
+    return False
 
 
 def run_login_only(driver):
     """Sadece giriş testini çalıştırır"""
     print("\n🔑 SADECE GİRİŞ TESTİ BAŞLATILIYOR...")
     print("="*50)
+    print("⚠️ Bu test artık TempMail kullanmıyor - sabit email ile test yapın")
+    return False
+
+
+def run_direct_login_only(driver):
+    """Sabit email ve şifre ile direkt giriş testini çalıştırır"""
+    print("\n🔑 DİREKT GİRİŞ TESTİ BAŞLATILIYOR...")
+    print("="*50)
+    print("📧 Email: viva.vista000@gmail.com")
+    print("🔒 Şifre: 123456aA")
+    print("="*50)
     
     automation = HepsiburadaAutomation(driver)
     
     try:
-        success = automation.run_login_test()
+        success = automation.run_direct_login_test()
         
         if success:
-            print("\n🎉 GİRİŞ TESTİ BAŞARILI!")
-            print(f"📧 Email: {automation.temp_email}")
-            print(f"🔒 Şifre: {automation.password}")
+            print("\n🎉 DİREKT GİRİŞ TESTİ BAŞARILI!")
+            print("✅ viva.vista000@gmail.com ile giriş yapıldı!")
         else:
-            print("\n❌ GİRİŞ TESTİ BAŞARISIZ!")
+            print("\n❌ DİREKT GİRİŞ TESTİ BAŞARISIZ!")
             
         return success
         
     except Exception as e:
-        print(f"\n❌ Giriş testi hatası: {e}")
+        print(f"\n❌ Direkt giriş testi hatası: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -237,38 +174,98 @@ def run_filtered_product_selection(driver):
         return False
 
 
-def run_tempail_test_only(driver):
-    """Sadece Tempail email testini çalıştırır"""
-    print("\n📧 SADECE TEMPAIL EMAIL TESTİ BAŞLATILIYOR...")
+def run_add_to_cart_test(driver):
+    """Sepete ekleme testini çalıştırır"""
+    print("\n🛒 SEPETE EKLEME TESTİ BAŞLATILIYOR...")
+    print("="*50)
+    print("📋 Süreç: Laptop Kategorisi → Filtreleme → Ürün Seçimi → Sepete Ekleme")
     print("="*50)
     
     automation = HepsiburadaAutomation(driver)
     
     try:
-        # Email al
-        print("📧 Geçici email alınıyor...")
-        email = automation.get_temp_email()
+        success = automation.run_add_to_cart_test()
         
-        if email:
-            print(f"✅ Email başarıyla alındı: {email}")
-            
-            # Email formatını kontrol et
-            if "@" in email and "tempail.com" in email:
-                print("✅ Email formatı doğru")
-                print("✅ Tempail email testi başarılı!")
-                return True
-            else:
-                print("❌ Email formatı yanlış")
-                return False
+        if success:
+            print("\n🎉 SEPETE EKLEME TESTİ BAŞARILI!")
+            print("✅ Ürün seçimi ve sepete ekleme tamamlandı!")
         else:
-            print("❌ Email alınamadı")
-            return False
+            print("\n❌ SEPETE EKLEME TESTİ BAŞARISIZ!")
             
+        return success
+        
     except Exception as e:
-        print(f"\n❌ Tempail testi hatası: {e}")
+        print(f"\n❌ Sepete ekleme testi hatası: {e}")
         import traceback
         traceback.print_exc()
         return False
+
+
+def run_step_by_step_test(driver):
+    """Adım adım test - sadece navigasyon"""
+    print("\n🎯 ADIM ADIM TEST BAŞLATILIYOR...")
+    print("="*50)
+    print("📋 Süreç:")
+    print("   1. 🏠 Hepsiburada ana sayfasına git")
+    print("   2. 🍪 Çerezleri kabul et")
+    print("   3. 🖱️ Giriş Yap butonuna hover yap")
+    print("   4. 🔗 Submenüden Giriş Yap'a tıkla")
+    print("="*50)
+    
+    automation = HepsiburadaAutomation(driver)
+    
+    try:
+        success = automation.run_step_by_step_test()
+        
+        if success:
+            print("\n🎉 ADIM ADIM TEST BAŞARILI!")
+            print("✅ Tüm navigasyon adımları başarıyla tamamlandı!")
+        else:
+            print("\n❌ ADIM ADIM TEST BAŞARISIZ!")
+            
+        return success
+        
+    except Exception as e:
+        print(f"\n❌ Adım adım test hatası: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
+def run_full_login_test(driver):
+    """Tam giriş testi - tüm adımlar"""
+    print("\n🔑 TAM GİRİŞ TESTİ BAŞLATILIYOR...")
+    print("="*50)
+    print("📋 Süreç:")
+    print("   1. 🏠 Hepsiburada ana sayfasına git")
+    print("   2. 🍪 Çerezleri kabul et")
+    print("   3. 🖱️ Giriş Yap butonuna hover yap")
+    print("   4. 🔗 Submenüden Giriş Yap'a tıkla")
+    print("   5. 📧 Email adresini gir (viva.vista000@gmail.com)")
+    print("   6. 🔒 Şifreyi gir (123456aA)")
+    print("   7. 🔑 Giriş yap butonuna tıkla")
+    print("="*50)
+    
+    automation = HepsiburadaAutomation(driver)
+    
+    try:
+        success = automation.run_full_login_test()
+        
+        if success:
+            print("\n🎉 TAM GİRİŞ TESTİ BAŞARILI!")
+            print("✅ Tüm giriş adımları başarıyla tamamlandı!")
+        else:
+            print("\n❌ TAM GİRİŞ TESTİ BAŞARISIZ!")
+            
+        return success
+        
+    except Exception as e:
+        print(f"\n❌ Tam giriş testi hatası: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
 
 
 def main():
@@ -283,7 +280,7 @@ def main():
             show_menu()
             
             try:
-                choice = input("\nSeçiminizi yapın (1-7): ").strip()
+                choice = input("\nSeçiminizi yapın (1-10): ").strip()
                 
                 if choice == "1":
                     success = run_full_automation(driver)
@@ -292,16 +289,22 @@ def main():
                 elif choice == "3":
                     success = run_login_only(driver)
                 elif choice == "4":
-                    success = run_product_selection_only(driver)
+                    success = run_direct_login_only(driver)
                 elif choice == "5":
-                    success = run_filtered_product_selection(driver)
+                    success = run_product_selection_only(driver)
                 elif choice == "6":
-                    success = run_tempail_test_only(driver)
+                    success = run_filtered_product_selection(driver)
                 elif choice == "7":
+                    success = run_add_to_cart_test(driver)
+                elif choice == "8":
+                    success = run_step_by_step_test(driver)
+                elif choice == "9":
+                    success = run_full_login_test(driver)
+                elif choice == "10":
                     print("\n👋 Çıkış yapılıyor...")
                     break
                 else:
-                    print("❌ Geçersiz seçim. Lütfen 1-7 arasında bir sayı girin.")
+                    print("❌ Geçersiz seçim. Lütfen 1-10 arasında bir sayı girin.")
                     continue
                 
                 # Sonuç göster
@@ -332,17 +335,16 @@ def main():
         traceback.print_exc()
         
     finally:
-        # WebDriver'ı kapat
-        if driver:
-            print("\n🔒 WebDriver kapatılıyor...")
-            try:
-                driver.quit()
-                print("✅ WebDriver başarıyla kapatıldı")
-            except:
-                print("⚠️ WebDriver kapatılırken hata oluştu")
-        
+        # WebDriver'ı kapatma - singleton pattern ile yönetiliyor
+        # Sadece program sonunda kapatılacak
         print("\n👋 Program sonlandırıldı.")
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    finally:
+        # Program sonunda WebDriver'ı kapat
+        print("\n🔒 WebDriver kapatılıyor...")
+        driver_manager.quit_driver()
+        print("✅ WebDriver kapatıldı")

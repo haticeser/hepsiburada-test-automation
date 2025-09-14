@@ -3,44 +3,21 @@
 """
 Hepsiburada Test Otomasyonu - Hızlı Çalıştırma Scripti
 Tests klasörü olmadan çalıştırılabilir
+WebDriver optimizasyonu ile hızlı çalışma
 """
 
 import sys
 import time
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
 
 # Pages modüllerini import et
 from pages.hepsiburada_automation import HepsiburadaAutomation
+from pages.driver_manager import driver_manager
 
 
 def quick_setup():
-    """Hızlı WebDriver kurulumu"""
-    print("🚀 Hızlı WebDriver kurulumu...")
-    
-    chrome_options = Options()
-    chrome_options.add_argument("--disable-blink-features=AutomationControlled")
-    chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    chrome_options.add_experimental_option('useAutomationExtension', False)
-    chrome_options.add_argument("--start-maximized")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--disable-notifications")
-    
-    try:
-        driver_path = ChromeDriverManager().install()
-        service = Service(driver_path)
-        driver = webdriver.Chrome(service=service, options=chrome_options)
-        print("✅ WebDriver hazır!")
-        return driver
-    except Exception as e:
-        print(f"❌ WebDriver hatası: {e}")
-        driver = webdriver.Chrome(options=chrome_options)
-        print("✅ WebDriver hazır (fallback)!")
-        return driver
+    """Hızlı WebDriver kurulumu - Optimize edilmiş versiyon"""
+    print("🚀 WebDriver alınıyor... (tek seferlik kurulum)")
+    return driver_manager.get_driver_safely()
 
 
 def main():
@@ -56,9 +33,12 @@ def main():
         print("  python run_automation.py full        # Tam otomasyon")
         print("  python run_automation.py register    # Sadece üye kaydı")
         print("  python run_automation.py login       # Sadece giriş")
+        print("  python run_automation.py direct      # Direkt giriş (viva.vista000@gmail.com)")
         print("  python run_automation.py product     # Sadece ürün seçimi")
         print("  python run_automation.py filtered    # Filtreli ürün seçimi")
-        print("  python run_automation.py tempail     # Sadece Tempail testi")
+        print("  python run_automation.py cart        # Sepete ekleme testi")
+        print("  python run_automation.py step        # Adım adım test (XPath ile)")
+        print("  python run_automation.py fullogin    # Tam giriş testi (Tüm adımlar)")
         print("  python run_automation.py menu        # İnteraktif menü")
         return
     
@@ -78,28 +58,16 @@ def main():
             
         elif test_type == "register":
             print("📝 Üye kaydı başlatılıyor...")
-            # Email al
-            automation.temp_email = automation.get_temp_email()
-            if not automation.temp_email:
-                print("❌ Email alınamadı")
-                return
-            
-            # Kayıt başlat
-            if automation.register_on_hepsiburada():
-                # Doğrulama kodu bekle
-                code = automation.wait_for_email_with_code(120)
-                if code:
-                    success = automation.complete_registration_with_code(code)
-                else:
-                    print("❌ Doğrulama kodu alınamadı")
-                    return
-            else:
-                print("❌ Kayıt başlatılamadı")
-                return
+            print("⚠️ Bu test artık TempMail kullanmıyor - sabit email ile test yapın")
+            success = False
                 
         elif test_type == "login":
             print("🔑 Giriş testi başlatılıyor...")
             success = automation.run_login_test()
+            
+        elif test_type == "direct":
+            print("🔑 Direkt giriş testi başlatılıyor...")
+            success = automation.run_direct_login_test()
             
         elif test_type == "product":
             print("🛍️ Ürün seçimi başlatılıyor...")
@@ -109,12 +77,17 @@ def main():
             print("🎯 Filtreli ürün seçimi başlatılıyor...")
             success = automation.select_and_click_first_product()
             
-        elif test_type == "tempail":
-            print("📧 Tempail testi başlatılıyor...")
-            email = automation.get_temp_email()
-            success = email is not None
-            if success:
-                print(f"✅ Email alındı: {email}")
+        elif test_type == "cart":
+            print("🛒 Sepet işlemleri testi başlatılıyor...")
+            success = automation.run_cart_operations_test()
+            
+        elif test_type == "step":
+            print("🎯 Adım adım test başlatılıyor...")
+            success = automation.run_step_by_step_test()
+            
+        elif test_type == "fullogin":
+            print("🔑 Tam giriş testi başlatılıyor...")
+            success = automation.run_full_login_test()
             
         elif test_type == "menu":
             print("📋 İnteraktif menü başlatılıyor...")
@@ -122,6 +95,7 @@ def main():
             import subprocess
             subprocess.run([sys.executable, "custom_automation.py"])
             return
+            
             
         else:
             print(f"❌ Bilinmeyen test türü: {test_type}")
@@ -132,9 +106,6 @@ def main():
         if 'success' in locals():
             if success:
                 print("🎉 İŞLEM BAŞARILI!")
-                if hasattr(automation, 'temp_email') and automation.temp_email:
-                    print(f"📧 Email: {automation.temp_email}")
-                    print(f"🔒 Şifre: {automation.password}")
             else:
                 print("❌ İŞLEM BAŞARISIZ!")
         print("="*60)
@@ -148,14 +119,16 @@ def main():
         traceback.print_exc()
         
     finally:
-        if driver:
-            print("\n🔒 WebDriver kapatılıyor...")
-            try:
-                driver.quit()
-                print("✅ WebDriver kapatıldı")
-            except:
-                print("⚠️ WebDriver kapatılırken hata oluştu")
+        # WebDriver'ı kapatma - singleton pattern ile yönetiliyor
+        # Sadece program sonunda kapatılacak
+        pass
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    finally:
+        # Program sonunda WebDriver'ı kapat
+        print("\n🔒 WebDriver kapatılıyor...")
+        driver_manager.quit_driver()
+        print("✅ WebDriver kapatıldı")

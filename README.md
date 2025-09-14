@@ -110,9 +110,10 @@ python run_automation.py menu
 - Tempail'den geçici email alır
 - Hepsiburada'da üye kaydı yapar
 - Doğrulama kodunu bekler ve girer
+- Giriş yapar ve doğrular
 - Dizüstü bilgisayar kategorisine gider
 - Lenovo + Intel Core i7 filtresi uygular
-- İlk filtrelenmiş ürünü seçer
+- İlk filtrelenmiş ürünü seçer ve ürün sayfasına gider
 
 ### 2. 📝 Sadece Üye Kaydı
 - Tempail'den email alır
